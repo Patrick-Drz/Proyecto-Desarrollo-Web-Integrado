@@ -1,0 +1,27 @@
+package com.utp.delivery.model;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.Data;
+import java.math.BigDecimal;
+
+@Data
+@Entity
+@Table(name = "detalles_orden_venta")
+public class DetalleOrdenVenta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_orden_venta")
+    @JsonBackReference("orden-detalle")
+    private OrdenVenta ordenVenta;
+
+    @ManyToOne
+    @JoinColumn(name = "id_producto")
+    private Producto producto;
+
+    private int cantidad;
+    private BigDecimal precioUnitarioAlMomento;
+}
