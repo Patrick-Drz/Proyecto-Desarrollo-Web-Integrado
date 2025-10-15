@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
@@ -28,6 +30,8 @@ public class Usuario implements UserDetails {
     private LocalDateTime fechaRegistro;
     private boolean activo;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "usuario")
     @JsonManagedReference("usuario-orden")
     private List<OrdenVenta> ordenesVenta;

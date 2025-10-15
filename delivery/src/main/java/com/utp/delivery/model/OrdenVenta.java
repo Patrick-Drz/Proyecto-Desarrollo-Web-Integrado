@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
@@ -22,18 +24,19 @@ public class OrdenVenta {
     private BigDecimal total;
     private String estado;
 
-    // Usuario
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     @JsonBackReference
     private Usuario usuario;
 
-    // Dirección de entrega
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_direccion_entrega", nullable = false)
     private Direccion direccionEntrega;
 
-    // Detalles de la Orden
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "ordenVenta", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<DetalleOrdenVenta> detalles;

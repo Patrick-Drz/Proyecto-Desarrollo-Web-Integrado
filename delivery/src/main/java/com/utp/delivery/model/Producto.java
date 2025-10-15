@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonManagedReference; 
 
 @Data
 @Entity
@@ -19,6 +22,9 @@ public class Producto {
     private int stock;
     private String rutaImagen;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonManagedReference("combo-componente")
     @OneToMany(mappedBy = "productoPadre")
     private List<ComboProducto> componentesCombo;
 }

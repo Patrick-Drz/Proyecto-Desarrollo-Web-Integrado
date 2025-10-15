@@ -7,12 +7,18 @@ import lombok.Data;
 @Entity
 @Table(name = "direcciones")
 public class Direccion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descripcion;
-    private String direccionCompleta;
-    private String ciudad;
-    private String distrito;
-    private String referencia;
+
+    @Enumerated(EnumType.STRING) 
+    private Torre torre;
+
+    private int piso;
+    private int aula;
+
+    public enum Torre {
+        A, B, C, D
+    }
 }
