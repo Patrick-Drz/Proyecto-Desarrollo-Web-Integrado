@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    private static final String SECRET_KEY = "clave_secreta_super_larga_y_segura_de_al_menos_256_bits_para_la_app";
+    private static final String SECRET_KEY = "a7$ZpL!9#tQ@wE^rY*uI&oP(kL-jHgFdSa=zXcVbNmQ+1w2e3r4t5y6u7i8o";
 
     public String extractUsername(String token) { return extractClaim(token, Claims::getSubject); }
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -28,7 +28,7 @@ public class JwtUtil {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) 
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
