@@ -22,18 +22,18 @@ public class OrdenVenta {
     private BigDecimal total;
     private String estado;
 
-    // Relación con Usuario
+    // Usuario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference // Lado "hijo": No se serializará para evitar el bucle
+    @JsonBackReference
     private Usuario usuario;
 
-    // Relación con Dirección de entrega
+    // Dirección de entrega
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_direccion_entrega", nullable = false)
     private Direccion direccionEntrega;
 
-    // Relación con Detalles de la Orden
+    // Detalles de la Orden
     @OneToMany(mappedBy = "ordenVenta", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<DetalleOrdenVenta> detalles;
