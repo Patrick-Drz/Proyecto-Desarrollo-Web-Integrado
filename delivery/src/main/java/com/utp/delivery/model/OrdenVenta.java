@@ -31,7 +31,7 @@ public class OrdenVenta {
     @JsonBackReference
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_direccion_entrega", nullable = false)
     private Direccion direccionEntrega;
 

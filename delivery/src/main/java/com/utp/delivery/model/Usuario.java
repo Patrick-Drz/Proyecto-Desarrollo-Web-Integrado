@@ -41,17 +41,22 @@ public class Usuario implements UserDetails {
     private List<Direccion> direcciones;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() { return List.of(new SimpleGrantedAuthority(rol)); }
     @Override
     public String getPassword() { return this.contrasena; }
     @Override
     public String getUsername() { return this.correo; }
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() { return true; }
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() { return true; }
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() { return true; }
     @Override
+    @JsonIgnore
     public boolean isEnabled() { return this.activo; }
 }
