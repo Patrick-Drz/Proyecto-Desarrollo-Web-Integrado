@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing-module'; 
+import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { Home } from './components/home/home';
 import { Navbar } from './components/navbar/navbar';
@@ -22,6 +22,7 @@ import { AdminOffers } from './components/admin/admin-offers/admin-offers';
 import { AdminSales } from './components/admin/admin-sales/admin-sales';
 import { AdminComplaints } from './components/admin/admin-complaints/admin-complaints';
 import { AboutComponent } from './components/about/about';
+import { ProfileComponent } from './components/profile/profile';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { AboutComponent } from './components/about/about';
     AdminOffers,
     AdminSales,
     AdminComplaints,
-    AboutComponent
+    AboutComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

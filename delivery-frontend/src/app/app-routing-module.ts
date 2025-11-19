@@ -14,6 +14,7 @@ import { AdminOffers } from './components/admin/admin-offers/admin-offers';
 import { AdminSales } from './components/admin/admin-sales/admin-sales';
 import { AdminComplaints } from './components/admin/admin-complaints/admin-complaints';
 import { AboutComponent } from './components/about/about';
+import { ProfileComponent } from './components/profile/profile';
 import { adminGuard } from './core/guards/admin-guard';
 import { clientGuard } from './core/guards/client-guard';
 import { authGuard } from './core/guards/auth-guard';
@@ -39,10 +40,11 @@ const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: 'menu', component: Menu },
-      { path: 'about', component: AboutComponent }, 
+      { path: 'about', component: AboutComponent },
       { path: 'cart', component: CartComponent, canActivate: [authGuard] },
       { path: 'location', component: LocationComponent, canActivate: [authGuard] },
       { path: 'orders', component: OrdersComponent, canActivate: [authGuard] },
+      { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
       { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) }
     ]
   },

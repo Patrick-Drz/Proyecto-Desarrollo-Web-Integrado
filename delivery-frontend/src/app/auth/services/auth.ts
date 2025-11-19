@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
   private tokenKey = 'auth_token';
-  private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
   
+  private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
   public userRole$ = this.userRoleSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -35,6 +35,11 @@ export class AuthService {
       })
     );
   }
+
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
+
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
@@ -64,9 +69,5 @@ export class AuthService {
     } catch (error) {
       return null;
     }
-  }
-
-  getCurrentRole(): string | null {
-    return this.userRoleSubject.value;
   }
 }
