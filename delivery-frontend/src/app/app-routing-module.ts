@@ -6,6 +6,7 @@ import { Home } from './components/home/home';
 import { Menu } from './components/menu/menu';
 import { CartComponent } from './components/cart/cart';
 import { LocationComponent } from './components/location/location';
+import { OrdersComponent } from './components/orders/orders';
 import { NotFound } from './components/not-found/not-found';
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
       { path: 'menu', component: Menu },
       { path: 'cart', component: CartComponent },
       { path: 'location', component: LocationComponent },
+      { path: 'orders', component: OrdersComponent },
       { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) }
     ]
   },

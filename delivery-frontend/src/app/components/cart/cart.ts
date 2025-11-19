@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService, Carrito } from '../../core/services/cart';
 import { LocationService } from '../../core/services/location';
+import { OrderService } from '../../core/services/order';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,10 +16,12 @@ export class CartComponent implements OnInit {
     piso: '---',
     aula: '---'
   };
+  idDireccion: number | null = null;
 
   constructor(
     private cartService: CartService,
     private locationService: LocationService,
+    private orderService: OrderService,
     private router: Router
   ) {}
 
@@ -29,6 +32,7 @@ export class CartComponent implements OnInit {
         this.cargarUbicacion();
       } else {
         this.ubicacion = { piso: '---', aula: '---' };
+        this.idDireccion = null;
       }
     });
     
@@ -46,6 +50,7 @@ export class CartComponent implements OnInit {
             piso: `Piso ${ultima.piso}`,
             aula: aulaFormateada
           };
+          this.idDireccion = ultima.id!;
         }
       },
       error: () => {
@@ -59,6 +64,23 @@ export class CartComponent implements OnInit {
   }
 
   procesarPago(): void {
-    alert('Funcionalidad de pago en desarrollo');
+    if (!this.idDireccion) {
+      alert('Por favor, registra tu ubicación (Tu Aula) antes de realizar el pedido.');
+      this.router.navigate(['/location']);
+      return;
+    }
+
+    if (confirm('¿Confirmar pedido? El pago se realizará contra entrega.')) {
+      this.orderService.crearOrden(this.idDireccion).subscribe({
+        next: () => {
+          alert('¡Pedido realizado con éxito!');
+          this.cartService.recargarCarrito(); 
+          this.router.navigate(['/orders']);
+        },
+        error: () => {
+          alert('Ocurrió un error al procesar el pedido.');
+        }
+      });
+    }
   }
 }
