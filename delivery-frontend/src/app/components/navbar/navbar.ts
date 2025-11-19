@@ -15,12 +15,13 @@ export class Navbar implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.userRole$.subscribe(role => {
+      this.isLoggedIn = !!role;
+    });
   }
 
   logout(): void {
     this.authService.logout();
-    this.isLoggedIn = false;
     this.router.navigate(['/']);
   }
 }

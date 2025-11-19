@@ -1,48 +1,42 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" routerLink="/">
-            <i class="fa-solid fa-utensils me-2"></i>Delivery UTP
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <i class="fa-solid fa-utensils me-2"></i>Delivery UTP
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/menu" routerLinkActive="active">Comprar</a></li>
+        <li class="nav-item" *ngIf="isLoggedIn"><a class="nav-link" routerLink="/location" routerLinkActive="active">Tu Aula</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active">Nosotros</a></li>
+      </ul>
+      <div class="d-flex align-items-center gap-3">
+        <a routerLink="/cart" class="btn-cart position-relative">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active"
-                        [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/menu" routerLinkActive="active">Comprar</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/location" routerLinkActive="active">Tu Aula</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active">Nosotros</a></li>
+        
+        <ng-container *ngIf="isLoggedIn; else loginTemplate">
+          <div class="dropdown">
+            <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Hola, {{ userName }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" routerLink="/profile">Mi Perfil</a></li>
+              <li><a class="dropdown-item" routerLink="/orders">Mis Pedidos</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-danger" (click)="logout()">Cerrar Sesión</button></li>
             </ul>
-            <div class="d-flex align-items-center gap-3">
-                <a routerLink="/cart" class="btn-cart position-relative">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-                </a>
-
-                <ng-container *ngIf="isLoggedIn; else loginTemplate">
-                    <div class="dropdown">
-                        <button class="btn btn-link text-white text-decoration-none dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown">
-                            Hola, {{ userName }}
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" routerLink="/profile">Mi Perfil</a></li>
-                            <li><a class="dropdown-item" routerLink="/orders">Mis Pedidos</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><button class="dropdown-item text-danger" (click)="logout()">Cerrar Sesión</button></li>
-                        </ul>
-                    </div>
-                </ng-container>
-
-                <ng-template #loginTemplate>
-                    <a routerLink="/auth" class="btn btn-outline-light btn-sm px-4">Iniciar Sesión</a>
-                </ng-template>
-            </div>
-        </div>
+          </div>
+        </ng-container>
+        
+        <ng-template #loginTemplate>
+          <a routerLink="/auth" class="btn btn-outline-light btn-sm px-4">Iniciar Sesión</a>
+        </ng-template>
+      </div>
     </div>
+  </div>
 </nav>
