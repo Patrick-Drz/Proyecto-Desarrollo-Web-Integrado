@@ -23,8 +23,14 @@ public class OrdenVentaService {
     @Transactional
     public OrdenVenta crearOrdenDesdeCarrito(Long idUsuario, CrearOrdenRequest ordenRequest) {
         Carrito carrito = carritoService.obtenerCarritoPorUsuario(idUsuario);
-        if (carrito.getItems().isEmpty()) { throw new IllegalStateException("El carrito está vacío."); }
-        Direccion direccion = direccionRepository.findById(ordenRequest.getIdDireccionEntrega()).orElseThrow(() -> new EntityNotFoundException("Dirección no encontrada"));
+        
+        if (carrito.getItems().isEmpty()) { 
+            throw new IllegalStateException("El carrito está vacío."); 
+        }
+        
+        Direccion direccion = direccionRepository.findById(ordenRequest.getIdDireccionEntrega())
+                .orElseThrow(() -> new EntityNotFoundException("Dirección no encontrada"));
+        
         OrdenVenta orden = new OrdenVenta();
         Usuario usuario = new Usuario();
         usuario.setId(idUsuario);
@@ -32,25 +38,41 @@ public class OrdenVentaService {
         orden.setDireccionEntrega(direccion);
         orden.setFechaOrden(LocalDateTime.now());
         orden.setEstado("PENDIENTE");
+        
         List<DetalleOrdenVenta> detalles = carrito.getItems().stream().map(itemCarrito -> {
             DetalleOrdenVenta detalle = new DetalleOrdenVenta();
-            detalle.setProducto(itemCarrito.getProducto());
+            
+            if (itemCarrito.getProducto() != null) {
+                detalle.setProducto(itemCarrito.getProducto());
+            } else if (itemCarrito.getOferta() != null) {
+                detalle.setOferta(itemCarrito.getOferta());
+            }
+            
             detalle.setCantidad(itemCarrito.getCantidad());
             detalle.setPrecioUnitarioAlMomento(itemCarrito.getPrecioUnitarioAlMomento());
             detalle.setOrdenVenta(orden);
             return detalle;
         }).collect(Collectors.toList());
+
+
         orden.setDetalles(detalles);
-        BigDecimal totalOrden = detalles.stream().map(detalle -> detalle.getPrecioUnitarioAlMomento().multiply(new BigDecimal(detalle.getCantidad()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        BigDecimal totalOrden = detalles.stream()
+                .map(detalle -> detalle.getPrecioUnitarioAlMomento().multiply(new BigDecimal(detalle.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
         orden.setTotal(totalOrden);
+        
         OrdenVenta ordenGuardada = ordenVentaRepository.save(orden);
         carritoService.limpiarCarrito(idUsuario);
         return ordenGuardada;
     }
+
     @Transactional(readOnly = true)
     public List<OrdenVenta> obtenerOrdenesPorUsuario(Long idUsuario) {
         return ordenVentaRepository.findByUsuarioId(idUsuario);
     }
+
     @Transactional(readOnly = true)
     public List<OrdenVenta> obtenerTodasLasOrdenes() {
         return ordenVentaRepository.findAll();

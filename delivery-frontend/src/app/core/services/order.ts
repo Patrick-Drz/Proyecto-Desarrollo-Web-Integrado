@@ -4,10 +4,15 @@ import { Observable } from 'rxjs';
 
 export interface DetalleOrden {
   id: number;
-  producto: {
+  producto?: {
     id: number;
     nombre: string;
     rutaImagen: string;
+  };
+  oferta?: {
+    id: number;
+    nombreOferta: string;
+    descripcionOferta: string;
   };
   cantidad: number;
   precioUnitarioAlMomento: number;

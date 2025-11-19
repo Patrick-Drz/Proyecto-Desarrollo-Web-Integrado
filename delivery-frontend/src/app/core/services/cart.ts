@@ -10,11 +10,16 @@ export interface UsuarioCarrito {
 
 export interface ItemCarrito {
   id: number;
-  producto: {
+  producto?: { 
     id: number;
     nombre: string;
     precio: number;
     rutaImagen: string;
+  };
+  oferta?: { 
+    id: number;
+    nombreOferta: string;
+    descripcionOferta: string;
   };
   cantidad: number;
   precioUnitarioAlMomento: number;
@@ -55,8 +60,12 @@ export class CartService {
     });
   }
 
-  agregarItem(idProducto: number, cantidad: number): Observable<Carrito> {
-    return this.http.post<Carrito>(`${this.apiUrl}/items`, { idProducto, cantidad }).pipe(
+  agregarItem(idProducto: number | null, cantidad: number, idOferta: number | null = null): Observable<Carrito> {
+    const payload: any = { cantidad };
+    if (idProducto) payload.idProducto = idProducto;
+    if (idOferta) payload.idOferta = idOferta;
+
+    return this.http.post<Carrito>(`${this.apiUrl}/items`, payload).pipe(
       tap(carrito => this.calcularTotal(carrito))
     );
   }

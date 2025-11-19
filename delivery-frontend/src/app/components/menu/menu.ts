@@ -3,6 +3,7 @@ import { ProductService, Producto } from '../../core/services/product';
 import { CartService } from '../../core/services/cart';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth';
+import { OfferService, Oferta } from '../../core/services/offer';
 
 @Component({
   selector: 'app-menu',
@@ -12,44 +13,20 @@ import { AuthService } from '../../auth/services/auth';
 })
 export class Menu implements OnInit {
   productos: Producto[] = [];
+  ofertas: Oferta[] = [];
   cantidades: { [key: number]: number } = {};
-
-  ofertas = [
-    {
-      id: 1,
-      nombre: 'Oferta Especial',
-      descripcion: 'Hamburguesa más papas fritas y gaseosa',
-      precioOriginal: 25.00,
-      precioOferta: 13.00,
-      imagen: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&q=80&w=1000'
-    },
-    {
-      id: 2,
-      nombre: 'Oferta Especial',
-      descripcion: 'Hamburguesa más papas fritas, helado y gaseosa',
-      precioOriginal: 35.00,
-      precioOferta: 20.00,
-      imagen: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&q=80&w=1000'
-    },
-    {
-      id: 3,
-      nombre: 'Oferta Especial',
-      descripcion: 'Pizza, pan al ajo, gaseosa y postre de chocolate',
-      precioOriginal: 40.00,
-      precioOferta: 22.00,
-      imagen: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1000'
-    }
-  ];
 
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private authService: AuthService,
+    private offerService: OfferService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
+    this.cargarOfertas();
   }
 
   cargarProductos(): void {
@@ -62,6 +39,22 @@ export class Menu implements OnInit {
     });
   }
 
+  cargarOfertas(): void {
+    this.offerService.obtenerOfertas().subscribe({
+      next: (data) => this.ofertas = data.filter(o => o.activa),
+      error: (err) => console.error(err)
+    });
+  }
+
+  calcularPrecioOferta(oferta: Oferta): number {
+    if (oferta.tipoDescuento === 'MONTO_FIJO') {
+      return Math.max(0, oferta.precioRegular - oferta.valorDescuento);
+    } else {
+      const descuento = oferta.precioRegular * (oferta.valorDescuento / 100);
+      return Math.max(0, oferta.precioRegular - descuento);
+    }
+  }
+
   agregarAlCarrito(producto: Producto): void {
     if (!this.authService.isLoggedIn()) {
       alert('Debes iniciar sesión para comprar.');
@@ -71,13 +64,27 @@ export class Menu implements OnInit {
 
     const cantidad = this.cantidades[producto.id] || 1;
     
-    this.cartService.agregarItem(producto.id, cantidad).subscribe({
-      next: () => {
-        alert(`¡${producto.nombre} añadido al carrito!`);
-      },
-      error: () => {
-        alert('Error al añadir producto. Intenta nuevamente.');
-      }
+    this.cartService.agregarItem(producto.id, cantidad, null).subscribe({
+      next: () => alert(`¡${producto.nombre} añadido al carrito!`),
+      error: () => alert('Error al añadir producto.')
     });
+  }
+
+  agregarOfertaAlCarrito(oferta: Oferta): void {
+    if (!this.authService.isLoggedIn()) {
+      alert('Debes iniciar sesión para comprar.');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    if (oferta.id) {
+      this.cartService.agregarItem(null, 1, oferta.id).subscribe({
+        next: () => alert(`¡Oferta "${oferta.nombreOferta}" añadida al carrito!`),
+        error: (err) => {
+          console.error(err);
+          alert('Error al añadir la oferta.');
+        }
+      });
+    }
   }
 }

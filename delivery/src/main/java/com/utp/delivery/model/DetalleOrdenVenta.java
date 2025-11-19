@@ -23,8 +23,12 @@ public class DetalleOrdenVenta {
     private OrdenVenta ordenVenta;
 
     @ManyToOne
-    @JoinColumn(name = "id_producto")
+    @JoinColumn(name = "id_producto", nullable = true) 
     private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_oferta", nullable = true)
+    private Oferta oferta;
 
     private int cantidad;
     private BigDecimal precioUnitarioAlMomento;

@@ -12,21 +12,15 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card border-0 shadow-sm mb-4 order-card" *ngFor="let orden of ordenes">
-                <div
-                    class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
                         <span class="fw-bold text-primary me-3">Orden #{{ orden.id }}</span>
-                        <span class="text-muted small"><i class="fa-regular fa-clock me-1"></i>{{ orden.fechaOrden |
-                            date:'short' }}</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="badge rounded-pill" [ngClass]="{
-                    'bg-warning text-dark': orden.estado === 'PENDIENTE',
-                    'bg-success': orden.estado === 'ENTREGADO',
-                    'bg-danger': orden.estado === 'CANCELADO'
-                  }">
-                            {{ orden.estado }}
+                        <span class="text-muted small">
+                            <i class="fa-regular fa-clock me-1"></i>{{ orden.fechaOrden | date:'short' }}
                         </span>
+                    </div>
+                    
+                    <div class="d-flex align-items-center gap-3">
                         <h5 class="mb-0 fw-bold text-dark">Total: S/ {{ orden.total | number:'1.2-2' }}</h5>
                     </div>
                 </div>
@@ -34,15 +28,26 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
-                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Productos</h6>
+                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Productos / Ofertas</h6>
                             <div class="d-flex flex-column gap-3">
                                 <div class="d-flex align-items-center" *ngFor="let detalle of orden.detalles">
-                                    <img [src]="detalle.producto.rutaImagen || 'assets/placeholder.jpg'"
-                                        class="rounded me-3 border" width="50" height="50" style="object-fit: cover;">
+                                    
+                                    <img [src]="detalle.producto?.rutaImagen || 'https://cdn-icons-png.flaticon.com/512/879/879757.png'"
+                                         class="rounded me-3 border" width="50" height="50" style="object-fit: cover;"
+                                         onerror="this.src='assets/placeholder.jpg'">
+                                    
                                     <div class="flex-grow-1">
-                                        <div class="fw-bold small">{{ detalle.producto.nombre }}</div>
-                                        <div class="text-muted x-small">Cant: {{ detalle.cantidad }} x S/ {{
-                                            detalle.precioUnitarioAlMomento | number:'1.2-2' }}</div>
+                                        <div class="fw-bold small">
+                                            {{ detalle.producto?.nombre || detalle.oferta?.nombreOferta || 'Ítem Desconocido' }}
+                                        </div>
+                                        
+                                        <small *ngIf="detalle.oferta" class="text-success fst-italic" style="font-size: 0.75rem;">
+                                            <i class="fa-solid fa-tag me-1"></i>Oferta Especial
+                                        </small>
+
+                                        <div class="text-muted x-small">
+                                            Cant: {{ detalle.cantidad }} x S/ {{ detalle.precioUnitarioAlMomento | number:'1.2-2' }}
+                                        </div>
                                     </div>
                                     <div class="fw-bold text-end small">
                                         S/ {{ (detalle.cantidad * detalle.precioUnitarioAlMomento) | number:'1.2-2' }}
@@ -56,15 +61,15 @@
                             <div class="bg-light p-3 rounded-3">
                                 <div class="mb-2">
                                     <i class="fa-solid fa-building text-primary me-2"></i>
-                                    <strong>Torre:</strong> {{ orden.direccionEntrega.torre }}
+                                    <strong>Torre:</strong> {{ orden.direccionEntrega?.torre }}
                                 </div>
                                 <div class="mb-2">
                                     <i class="fa-solid fa-layer-group text-primary me-2"></i>
-                                    <strong>Piso:</strong> {{ orden.direccionEntrega.piso }}
+                                    <strong>Piso:</strong> {{ orden.direccionEntrega?.piso }}
                                 </div>
                                 <div>
                                     <i class="fa-solid fa-door-open text-primary me-2"></i>
-                                    <strong>Aula:</strong> {{ orden.direccionEntrega.aula }}
+                                    <strong>Aula:</strong> {{ orden.direccionEntrega?.aula }}
                                 </div>
                             </div>
                         </div>
