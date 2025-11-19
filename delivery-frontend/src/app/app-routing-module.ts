@@ -12,6 +12,14 @@ import { NotFound } from './components/not-found/not-found';
 
 const routes: Routes = [
   {
+    path: 'admin',
+    component: AdminLayout,
+    children: [
+      { path: 'dashboard', component: Dashboard },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+    ]
+  },
+  {
     path: '',
     component: MainLayout,
     children: [
@@ -21,14 +29,6 @@ const routes: Routes = [
       { path: 'location', component: LocationComponent },
       { path: 'orders', component: OrdersComponent },
       { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) }
-    ]
-  },
-  {
-    path: 'admin',
-    component: AdminLayout,
-    children: [
-      { path: 'dashboard', component: Dashboard },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   { path: '**', component: NotFound }
