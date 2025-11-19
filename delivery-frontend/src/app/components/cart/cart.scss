@@ -1,0 +1,42 @@
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 15px rgba(0,0,0,0.05) !important;
+}
+
+.accent-bar {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 4px;
+  background-color: #2c6ae5;
+  border-radius: 0 4px 4px 0;
+}
+
+.bg-light-blue {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+.btn-primary {
+  background-color: #2c6ae5;
+  border-color: #2c6ae5;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #1a4db3;
+    transform: translateY(-2px);
+  }
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+h2 {
+  color: #333;
+}

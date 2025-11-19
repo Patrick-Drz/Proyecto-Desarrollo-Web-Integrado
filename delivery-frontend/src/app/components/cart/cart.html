@@ -1,0 +1,95 @@
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="d-flex align-items-center mb-4">
+                <i class="fa-solid fa-cart-shopping fa-2x me-3 text-dark"></i>
+                <h2 class="fw-bold m-0">Mi Carrito de Compras</h2>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-user me-2"></i>Datos del Usuario</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <strong>Nombre Completo:</strong> <span class="text-muted ms-2">{{ usuario?.nombreCompleto
+                                }}</span>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <strong>Código de Estudiante:</strong> <span class="text-muted ms-2">{{
+                                usuario?.codigoEstudiante }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4 position-relative">
+                    <div class="accent-bar"></div>
+                    <h5 class="fw-bold mb-3"><i class="fa-solid fa-location-dot me-2"></i>Mi Ubicación de Entrega</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <strong>Piso:</strong> <span class="text-muted ms-2">{{ ubicacion.piso }}</span>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <strong>Código de Aula:</strong> <span class="text-muted ms-2">{{ ubicacion.aula }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm cart-content">
+                <div class="card-body p-5 text-center" *ngIf="!carrito || !carrito.items || carrito.items.length === 0">
+                    <div class="alert alert-info border-0 bg-light-blue text-dark mb-4">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i> Tu carrito está vacío. ¡Añade algunos
+                        productos u ofertas!
+                    </div>
+                    <button class="btn btn-primary btn-lg px-5 rounded-3" (click)="irAComprar()">
+                        <i class="fa-solid fa-bag-shopping me-2"></i>Ir a Comprar
+                    </button>
+                </div>
+
+                <div class="card-body p-4" *ngIf="carrito && carrito.items && carrito.items.length > 0">
+                    <div class="table-responsive mb-4">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of carrito.items">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img [src]="item.producto.rutaImagen || 'assets/placeholder.jpg'" alt=""
+                                                style="width: 50px; height: 50px; object-fit: cover;"
+                                                class="rounded me-3">
+                                            <span>{{ item.producto.nombre }}</span>
+                                        </div>
+                                    </td>
+                                    <td>S/ {{ item.precioUnitarioAlMomento | number:'1.2-2' }}</td>
+                                    <td>{{ item.cantidad }}</td>
+                                    <td class="fw-bold">S/ {{ (item.precioUnitarioAlMomento * item.cantidad) |
+                                        number:'1.2-2' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-end align-items-center">
+                        <h4 class="me-4 mb-0">Total: <span class="text-primary fw-bold">S/ {{ carrito.total |
+                                number:'1.2-2' }}</span></h4>
+                        <button class="btn btn-success btn-lg" (click)="procesarPago()">Pagar Ahora</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

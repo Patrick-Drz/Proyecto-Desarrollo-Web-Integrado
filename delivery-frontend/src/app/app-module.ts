@@ -10,6 +10,7 @@ import { Home } from './components/home/home';
 import { Navbar } from './components/navbar/navbar';
 import { NotFound } from './components/not-found/not-found';
 import { Menu } from './components/menu/menu';
+import { CartComponent } from './components/cart/cart';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
 
@@ -20,6 +21,7 @@ import { AdminLayout } from './layouts/admin-layout/admin-layout';
     Navbar,
     NotFound,
     Menu,
+    CartComponent,
     MainLayout,
     AdminLayout
   ],
