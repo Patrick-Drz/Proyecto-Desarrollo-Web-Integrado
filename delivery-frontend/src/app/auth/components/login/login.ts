@@ -29,9 +29,11 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           const role = this.authService.getRoleFromToken();
+          
           if (role === 'ADMIN') {
             this.router.navigate(['/admin/dashboard']);
           } else {
+            if (role !== 'CLIENTE') alert('Rol detectado: ' + role); 
             this.router.navigate(['/']); 
           }
         },
