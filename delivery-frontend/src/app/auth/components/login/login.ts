@@ -28,7 +28,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/']); 
+          const role = this.authService.getRoleFromToken();
+          if (role === 'ADMIN') {
+            this.router.navigate(['/admin/dashboard']);
+          } else {
+            this.router.navigate(['/']); 
+          }
         },
         error: (err) => {
           this.errorMessage = 'Credenciales incorrectas. Inténtalo de nuevo.';

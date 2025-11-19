@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +33,22 @@ public class AuthService {
         user.setActivo(true);
         user.setFechaRegistro(LocalDateTime.now());
         usuarioRepository.save(user);
-        var jwtToken = jwtUtil.generateToken(user);
+        
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRol());
+        
+        var jwtToken = jwtUtil.generateToken(extraClaims, user);
         return AuthResponse.builder().token(jwtToken).build();
     }
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCorreo(), request.getContrasena()));
         var user = usuarioRepository.findByCorreo(request.getCorreo()).orElseThrow();
-        var jwtToken = jwtUtil.generateToken(user);
+        
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRol());
+        
+        var jwtToken = jwtUtil.generateToken(extraClaims, user);
         return AuthResponse.builder().token(jwtToken).build();
     }
 }
