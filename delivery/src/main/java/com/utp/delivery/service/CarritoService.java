@@ -4,6 +4,7 @@ import com.utp.delivery.dto.AddItemRequest;
 import com.utp.delivery.model.*;
 import com.utp.delivery.repository.CarritoRepository;
 import com.utp.delivery.repository.ProductoRepository;
+import com.utp.delivery.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class CarritoService {
     private final CarritoRepository carritoRepository;
     private final ProductoRepository productoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Transactional
     public Carrito agregarItemACarrito(Long idUsuario, AddItemRequest itemRequest) {
@@ -47,8 +49,7 @@ public class CarritoService {
     private Carrito obtenerOCrearCarrito(Long idUsuario) {
         return carritoRepository.findByUsuarioId(idUsuario).orElseGet(() -> {
             Carrito nuevoCarrito = new Carrito();
-            Usuario usuario = new Usuario();
-            usuario.setId(idUsuario);
+            Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
             nuevoCarrito.setUsuario(usuario);
             nuevoCarrito.setFechaCreacion(LocalDateTime.now());
             nuevoCarrito.setFechaActualizacion(LocalDateTime.now());
