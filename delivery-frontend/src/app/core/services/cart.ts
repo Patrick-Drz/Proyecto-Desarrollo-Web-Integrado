@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { AuthService } from '../../auth/services/auth';
 
+export interface UsuarioCarrito {
+  nombreCompleto: string;
+  codigoEstudiante: string;
+}
+
 export interface ItemCarrito {
   id: number;
   producto: {
@@ -17,8 +22,9 @@ export interface ItemCarrito {
 
 export interface Carrito {
   id: number;
+  usuario: UsuarioCarrito;
   items: ItemCarrito[];
-  total?: number; 
+  total?: number;
 }
 
 @Injectable({
@@ -31,15 +37,22 @@ export class CartService {
   cart$ = this.cartSubject.asObservable();
 
   constructor(private http: HttpClient, private authService: AuthService) {
-    if (this.authService.isLoggedIn()) {
-      this.obtenerCarrito().subscribe();
-    }
+    this.authService.userRole$.subscribe(role => {
+      if (role) {
+        this.recargarCarrito();
+      } else {
+        this.limpiarEstadoLocal();
+      }
+    });
   }
 
-  obtenerCarrito(): Observable<Carrito> {
-    return this.http.get<Carrito>(this.apiUrl).pipe(
+  recargarCarrito(): void {
+    this.http.get<Carrito>(this.apiUrl).pipe(
       tap(carrito => this.calcularTotal(carrito))
-    );
+    ).subscribe({
+      next: (c) => console.log(c),
+      error: () => this.cartSubject.next(null)
+    });
   }
 
   agregarItem(idProducto: number, cantidad: number): Observable<Carrito> {
@@ -53,5 +66,9 @@ export class CartService {
       carrito.total = carrito.items.reduce((acc, item) => acc + (item.cantidad * item.precioUnitarioAlMomento), 0);
       this.cartSubject.next(carrito);
     }
+  }
+
+  private limpiarEstadoLocal(): void {
+    this.cartSubject.next(null);
   }
 }

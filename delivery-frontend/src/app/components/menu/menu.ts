@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService, Producto } from '../../core/services/product';
+import { CartService } from '../../core/services/cart';
+import { Router } from '@angular/router';
+import { AuthService } from '../../auth/services/auth';
 
 @Component({
   selector: 'app-menu',
@@ -38,7 +41,12 @@ export class Menu implements OnInit {
     }
   ];
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -55,7 +63,21 @@ export class Menu implements OnInit {
   }
 
   agregarAlCarrito(producto: Producto): void {
+    if (!this.authService.isLoggedIn()) {
+      alert('Debes iniciar sesión para comprar.');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
     const cantidad = this.cantidades[producto.id] || 1;
-    console.log(`Agregando ${cantidad} de ${producto.nombre} al carrito`);
+    
+    this.cartService.agregarItem(producto.id, cantidad).subscribe({
+      next: () => {
+        alert(`¡${producto.nombre} añadido al carrito!`);
+      },
+      error: () => {
+        alert('Error al añadir producto. Intenta nuevamente.');
+      }
+    });
   }
 }
