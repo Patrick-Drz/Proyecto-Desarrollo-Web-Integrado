@@ -1,0 +1,73 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private apiUrl = 'http://localhost:8080/api/auth';
+  private tokenKey = 'auth_token';
+  private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
+  
+  public userRole$ = this.userRoleSubject.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) { }
+
+  register(datosUsuario: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, datosUsuario).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          this.saveToken(response.token);
+        }
+      })
+    );
+  }
+
+  login(credenciales: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, credenciales).pipe(
+      tap((response: any) => {
+        if (response.token) {
+          this.saveToken(response.token);
+        }
+      })
+    );
+  }
+
+  logout(): void {
+    localStorage.removeItem(this.tokenKey);
+    this.userRoleSubject.next(null);
+    this.router.navigate(['/auth/login']);
+  }
+
+  private saveToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+    this.userRoleSubject.next(this.getRoleFromToken());
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    return !!token;
+  }
+
+  getRoleFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.role || decoded.sub || null; 
+    } catch (error) {
+      return null;
+    }
+  }
+
+  hasRole(role: string): boolean {
+    return this.getRoleFromToken() === role;
+  }
+}
