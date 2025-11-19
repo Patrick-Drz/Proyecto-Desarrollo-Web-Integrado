@@ -13,11 +13,16 @@ import { AdminProducts } from './components/admin/admin-products/admin-products'
 import { AdminOffers } from './components/admin/admin-offers/admin-offers';
 import { AdminSales } from './components/admin/admin-sales/admin-sales';
 import { AdminComplaints } from './components/admin/admin-complaints/admin-complaints';
+import { AboutComponent } from './components/about/about';
+import { adminGuard } from './core/guards/admin-guard';
+import { clientGuard } from './core/guards/client-guard';
+import { authGuard } from './core/guards/auth-guard';
 
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminLayout,
+    canActivate: [adminGuard],
     children: [
       { path: 'dashboard', component: Dashboard },
       { path: 'products', component: AdminProducts },
@@ -30,12 +35,14 @@ const routes: Routes = [
   {
     path: '',
     component: MainLayout,
+    canActivate: [clientGuard],
     children: [
       { path: '', component: Home },
       { path: 'menu', component: Menu },
-      { path: 'cart', component: CartComponent },
-      { path: 'location', component: LocationComponent },
-      { path: 'orders', component: OrdersComponent },
+      { path: 'about', component: AboutComponent }, 
+      { path: 'cart', component: CartComponent, canActivate: [authGuard] },
+      { path: 'location', component: LocationComponent, canActivate: [authGuard] },
+      { path: 'orders', component: OrdersComponent, canActivate: [authGuard] },
       { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) }
     ]
   },
