@@ -14,6 +14,7 @@ import { Menu } from './components/menu/menu';
 import { CartComponent } from './components/cart/cart';
 import { LocationComponent } from './components/location/location';
 import { OrdersComponent } from './components/orders/orders';
+import { Dashboard } from './components/admin/dashboard/dashboard';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
@@ -28,6 +29,7 @@ import { AuthInterceptor } from './core/interceptors/auth-interceptor';
     CartComponent,
     LocationComponent,
     OrdersComponent,
+    Dashboard,
     MainLayout,
     AdminLayout
   ],

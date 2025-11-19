@@ -7,6 +7,7 @@ import { Menu } from './components/menu/menu';
 import { CartComponent } from './components/cart/cart';
 import { LocationComponent } from './components/location/location';
 import { OrdersComponent } from './components/orders/orders';
+import { Dashboard } from './components/admin/dashboard/dashboard';
 import { NotFound } from './components/not-found/not-found';
 
 const routes: Routes = [
@@ -26,7 +27,8 @@ const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     children: [
-      { path: 'dashboard', component: Home }, 
+      { path: 'dashboard', component: Dashboard },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   { path: '**', component: NotFound }
