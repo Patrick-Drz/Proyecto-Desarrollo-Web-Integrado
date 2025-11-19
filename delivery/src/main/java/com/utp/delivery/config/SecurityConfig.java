@@ -26,9 +26,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        
                         .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/productos/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/productos/**").authenticated()
+
+                        .requestMatchers(HttpMethod.GET, "/api/ofertas/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/ofertas/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/ofertas/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/ofertas/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

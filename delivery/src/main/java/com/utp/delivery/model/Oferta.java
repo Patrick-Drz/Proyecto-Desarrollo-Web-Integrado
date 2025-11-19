@@ -12,13 +12,22 @@ public class Oferta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombreOferta;
+    
     private String descripcionOferta;
+
+    private BigDecimal precioRegular;
+
     @Enumerated(EnumType.STRING)
-    private TipoDescuento tipoDescuento;
-    private BigDecimal valorDescuento;
+    private TipoDescuento tipoDescuento; 
+
+    private BigDecimal valorDescuento; 
+
     private LocalDateTime fechaInicio;
+    
     private LocalDateTime fechaFin;
+    
     private boolean activa;
 
     public enum TipoDescuento { PORCENTAJE, MONTO_FIJO }

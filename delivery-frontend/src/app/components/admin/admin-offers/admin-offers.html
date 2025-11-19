@@ -1,90 +1,105 @@
 <div class="container-fluid p-4">
-  <h2 class="mb-4">Gestión de Ofertas</h2>
+    <h2 class="fw-bold text-dark mb-4">Gestión de Ofertas</h2>
 
-  <div class="card mb-4">
-    <div class="card-header bg-primary text-white">Añadir Nueva Oferta</div>
-    <div class="card-body">
-      <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
-        <div class="mb-3">
-          <label class="form-label">Código de Oferta:</label>
-          <input type="text" class="form-control" formControlName="codigo">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Nombre de la Oferta:</label>
-          <input type="text" class="form-control" formControlName="nombre">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Descripción:</label>
-          <textarea class="form-control" rows="2" formControlName="descripcion"></textarea>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Precio Regular:</label>
-            <input type="number" class="form-control" formControlName="precioRegular">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Precio Oferta:</label>
-            <input type="number" class="form-control" formControlName="precioOferta">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Fecha de Inicio:</label>
-            <input type="date" class="form-control" formControlName="fechaInicio">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Fecha de Fin:</label>
-            <input type="date" class="form-control" formControlName="fechaFin">
-          </div>
-        </div>
-        <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" formControlName="activa" id="activeCheck">
-          <label class="form-check-label" for="activeCheck">Activa</label>
-        </div>
-        <button type="submit" class="btn btn-success" [disabled]="offerForm.invalid">Añadir Oferta</button>
-      </form>
-    </div>
-  </div>
+    <div class="card shadow-sm mb-5 border-0">
+        <div class="card-header bg-primary text-white fw-bold">Añadir Nueva Oferta</div>
+        <div class="card-body p-4">
+            <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
+                
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Nombre de la Oferta:</label>
+                    <input type="text" class="form-control bg-light border-0" formControlName="nombreOferta">
+                </div>
 
-  <div class="card">
-    <div class="card-header bg-info text-white">Lista de Ofertas</div>
-    <div class="card-body p-0">
-      <table class="table table-striped table-hover mb-0 align-middle">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>P. Regular</th>
-            <th>P. Oferta</th>
-            <th>Inicio</th>
-            <th>Fin</th>
-            <th>Activa</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let oferta of ofertas">
-            <td>{{oferta.id}}</td>
-            <td>{{oferta.codigo}}</td>
-            <td>{{oferta.nombre}}</td>
-            <td><small>{{oferta.descripcion}}</small></td>
-            <td>S/ {{oferta.precioRegular | number:'1.2-2'}}</td>
-            <td class="fw-bold text-success">S/ {{oferta.precioOferta | number:'1.2-2'}}</td>
-            <td>{{oferta.fechaInicio}}</td>
-            <td>{{oferta.fechaFin}}</td>
-            <td>
-              <span class="badge" [ngClass]="oferta.activa ? 'bg-success' : 'bg-secondary'">
-                {{oferta.activa ? 'Sí' : 'No'}}
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-danger btn-sm" (click)="eliminar(oferta.id)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Descripción:</label>
+                    <textarea class="form-control bg-light border-0" rows="2" formControlName="descripcionOferta"></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Tipo de Descuento:</label>
+                        <select class="form-select bg-light border-0" formControlName="tipoDescuento">
+                            <option value="MONTO_FIJO">Monto Fijo (S/)</option>
+                            <option value="PORCENTAJE">Porcentaje (%)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Precio Regular:</label>
+                        <input type="number" class="form-control bg-light border-0" formControlName="precioRegular">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Valor Descuento:</label>
+                        <input type="number" class="form-control bg-light border-0" formControlName="valorDescuento">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Fecha de Inicio:</label>
+                        <input type="datetime-local" class="form-control bg-light border-0" formControlName="fechaInicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Fecha de Fin:</label>
+                        <input type="datetime-local" class="form-control bg-light border-0" formControlName="fechaFin">
+                    </div>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" formControlName="activa" id="activeCheck">
+                    <label class="form-check-label" for="activeCheck">Oferta Activa</label>
+                </div>
+
+                <button type="submit" class="btn btn-success px-4 fw-bold" [disabled]="offerForm.invalid">
+                    <i class="fa-solid fa-plus me-2"></i>Añadir Oferta
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-info text-white fw-bold">Lista de Ofertas</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>P. Regular</th>
+                            <th>Desc.</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Activa</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let oferta of ofertas">
+                            <td class="ps-3">{{oferta.id}}</td>
+                            <td class="fw-bold">{{oferta.nombreOferta}}</td>
+                            <td><span class="badge bg-light text-dark border">{{oferta.tipoDescuento}}</span></td>
+                            <td>S/ {{oferta.precioRegular | number:'1.2-2'}}</td>
+                            <td class="text-success fw-bold">{{oferta.valorDescuento | number:'1.2-2'}}</td>
+                            <td>{{oferta.fechaInicio | date:'short'}}</td>
+                            <td>{{oferta.fechaFin | date:'short'}}</td>
+                            <td>
+                                <span class="badge" [ngClass]="oferta.activa ? 'bg-success' : 'bg-secondary'">
+                                    {{oferta.activa ? 'Sí' : 'No'}}
+                                </span>
+                            </td>
+                            <td class="pe-3">
+                                <button class="btn btn-danger btn-sm fw-bold" (click)="eliminar(oferta.id)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

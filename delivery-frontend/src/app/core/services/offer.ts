@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface Oferta {
-  id: number;
-  codigo: string;
-  nombre: string;
-  descripcion: string;
+  id?: number;
+  nombreOferta: string;
+  descripcionOferta: string;
   precioRegular: number;
-  precioOferta: number;
+  valorDescuento: number;
+  tipoDescuento: 'PORCENTAJE' | 'MONTO_FIJO';
   fechaInicio: string;
   fechaFin: string;
   activa: boolean;
@@ -17,38 +18,23 @@ export interface Oferta {
   providedIn: 'root'
 })
 export class OfferService {
-  private ofertasIniciales: Oferta[] = [
-    { id: 1, codigo: 'OFR001', nombre: 'Combo Hamburguesa', descripcion: 'Hamburguesa + Papas + Gaseosa', precioRegular: 25.00, precioOferta: 18.00, fechaInicio: '2025-06-01', fechaFin: '2025-06-30', activa: true },
-    { id: 2, codigo: 'OFR002', nombre: 'Desayuno Continental', descripcion: 'Café + Tostadas + Jugo', precioRegular: 15.00, precioOferta: 10.00, fechaInicio: '2025-06-01', fechaFin: '2025-06-30', activa: true }
-  ];
+  private apiUrl = 'http://localhost:8080/api/ofertas';
 
-  private ofertasSubject = new BehaviorSubject<Oferta[]>(this.ofertasIniciales);
-  ofertas$ = this.ofertasSubject.asObservable();
+  constructor(private http: HttpClient) { }
 
   obtenerOfertas(): Observable<Oferta[]> {
-    return this.ofertas$;
+    return this.http.get<Oferta[]>(this.apiUrl);
   }
 
-  crearOferta(oferta: Oferta): Observable<boolean> {
-    const actuales = this.ofertasSubject.value;
-    oferta.id = actuales.length > 0 ? Math.max(...actuales.map(o => o.id)) + 1 : 1;
-    this.ofertasSubject.next([...actuales, oferta]);
-    return of(true);
+  crearOferta(oferta: Oferta): Observable<Oferta> {
+    return this.http.post<Oferta>(this.apiUrl, oferta);
   }
 
-  eliminarOferta(id: number): Observable<boolean> {
-    const actuales = this.ofertasSubject.value;
-    this.ofertasSubject.next(actuales.filter(o => o.id !== id));
-    return of(true);
+  actualizarOferta(id: number, oferta: Oferta): Observable<Oferta> {
+    return this.http.put<Oferta>(`${this.apiUrl}/${id}`, oferta);
   }
 
-  actualizarOferta(oferta: Oferta): Observable<boolean> {
-    const actuales = this.ofertasSubject.value;
-    const index = actuales.findIndex(o => o.id === oferta.id);
-    if (index !== -1) {
-      actuales[index] = oferta;
-      this.ofertasSubject.next([...actuales]);
-    }
-    return of(true);
+  eliminarOferta(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
