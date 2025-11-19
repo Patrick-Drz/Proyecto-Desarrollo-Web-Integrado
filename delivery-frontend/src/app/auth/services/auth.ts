@@ -52,8 +52,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return !!this.getToken();
   }
 
   getRoleFromToken(): string | null {
@@ -61,13 +60,13 @@ export class AuthService {
     if (!token) return null;
     try {
       const decoded: any = jwtDecode(token);
-      return decoded.role || decoded.sub || null; 
+      return decoded.role || decoded.roles || decoded.sub || null; 
     } catch (error) {
       return null;
     }
   }
 
-  hasRole(role: string): boolean {
-    return this.getRoleFromToken() === role;
+  getCurrentRole(): string | null {
+    return this.userRoleSubject.value;
   }
 }

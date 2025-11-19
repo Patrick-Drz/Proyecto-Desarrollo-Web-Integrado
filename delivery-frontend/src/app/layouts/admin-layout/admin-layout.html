@@ -3,12 +3,16 @@
         <div class="logo">Delivery UTP Admin</div>
         <nav>
             <ul>
-                <li><a routerLink="/admin/dashboard">Dashboard</a></li>
-                <li><a routerLink="/admin/products">Productos</a></li>
-                <li><a routerLink="/admin/offers">Ofertas</a></li>
-                <li><a routerLink="/admin/orders">Ventas</a></li>
-                <li><a routerLink="/admin/complaints">Reclamaciones</a></li>
-                <li><a routerLink="/">Cerrar Sesión</a></li>
+                <li><a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
+                <li><a routerLink="/admin/products" routerLinkActive="active">Productos</a></li>
+                <li><a routerLink="/admin/offers" routerLinkActive="active">Ofertas</a></li>
+                <li><a routerLink="/admin/orders" routerLinkActive="active">Ventas</a></li>
+                <li><a routerLink="/admin/complaints" routerLinkActive="active">Reclamaciones</a></li>
+                <li class="mt-5">
+                    <a class="text-danger fw-bold" style="cursor: pointer;" (click)="logout()">
+                        <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>
