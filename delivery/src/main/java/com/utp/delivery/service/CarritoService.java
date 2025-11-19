@@ -44,7 +44,6 @@ public class CarritoService {
         return carritoRepository.save(carrito);
     }
 
-    // CORRECCIÓN: Se eliminó (readOnly = true) porque este método puede crear un carrito nuevo
     @Transactional
     public Carrito obtenerCarritoPorUsuario(Long idUsuario) { 
         return obtenerOCrearCarrito(idUsuario); 
