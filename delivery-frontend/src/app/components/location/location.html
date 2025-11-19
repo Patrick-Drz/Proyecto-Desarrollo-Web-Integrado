@@ -1,0 +1,56 @@
+<div class="container py-5 location-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-lg overflow-hidden">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold">Ingresa tu Ubicación de Aula</h4>
+                </div>
+
+                <div class="card-body p-5">
+                    <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">Piso:</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Ej: Tercer Piso"
+                                formControlName="pisoDescripcion">
+                            <div *ngIf="locationForm.get('pisoDescripcion')?.touched && locationForm.get('pisoDescripcion')?.invalid"
+                                class="text-danger small mt-1">
+                                Debes ingresar una descripción del piso.
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">Código de Aula:</label>
+                            <input type="text" class="form-control form-control-lg" placeholder="Ej: A0303"
+                                formControlName="codigoAula">
+                            <div class="form-text text-muted">Formato esperado: Una letra (A-D) seguida de 4 dígitos
+                                (Ej: A0303).</div>
+
+                            <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['required']"
+                                class="text-danger small mt-1">
+                                El código es requerido.
+                            </div>
+                            <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['pattern']"
+                                class="text-danger small mt-1">
+                                Formato inválido. Usa Mayúscula + 4 números (Ej: A0303).
+                            </div>
+                        </div>
+
+                        <div *ngIf="mensajeExito" class="alert alert-success text-center">{{ mensajeExito }}</div>
+                        <div *ngIf="mensajeError" class="alert alert-danger text-center">{{ mensajeError }}</div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold"
+                                [disabled]="locationForm.invalid">
+                                Guardar Ubicación
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
