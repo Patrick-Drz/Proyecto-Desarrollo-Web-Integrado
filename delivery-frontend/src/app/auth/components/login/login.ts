@@ -6,7 +6,8 @@ import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrls: ['./login.scss'],
+  standalone: false
 })
 export class LoginComponent {
   loginForm: FormGroup;
@@ -29,9 +30,10 @@ export class LoginComponent {
         next: () => {
           const role = this.authService.getRoleFromToken();
           
-          if (role && role.toUpperCase() === 'ADMIN') {
+          if (role === 'ADMIN') {
             this.router.navigate(['/admin/dashboard']);
           } else {
+            if (role !== 'CLIENTE') alert('Rol detectado: ' + role); 
             this.router.navigate(['/']); 
           }
         },
