@@ -1,56 +1,72 @@
-<div class="container py-5 location-container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+<div class="location-full-page-bg">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9 col-lg-7">
 
-            <div class="card border-0 shadow-lg overflow-hidden">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h4 class="mb-0 fw-bold">Ingresa tu Ubicación de Aula</h4>
+                <div class="location-card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-5">
+                            <div class="icon-circle mb-3 mx-auto">
+                                <i class="fa-solid fa-map-location-dot fa-2x"></i>
+                            </div>
+                            <h2 class="fw-bold text-primary mb-2">Define tu Ubicación de Entrega</h2>
+                            <p class="text-muted lead-sm">Para que tus pedidos lleguen directo a tu aula.</p>
+                        </div>
+
+                        <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
+
+                            <div class="mb-4">
+                                <label for="piso" class="form-label fw-bold">Piso</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+                                    <input type="text" id="piso" class="form-control form-control-lg"
+                                        placeholder="Ej: Tercer Piso" formControlName="pisoDescripcion">
+                                </div>
+                                <div *ngIf="locationForm.get('pisoDescripcion')?.touched && locationForm.get('pisoDescripcion')?.invalid"
+                                    class="text-danger small mt-1">
+                                    Ingresa una descripción para el piso.
+                                </div>
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="codigoAula" class="form-label fw-bold">Código de Aula</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-door-open"></i></span>
+                                    <input type="text" id="codigoAula" class="form-control form-control-lg"
+                                        placeholder="Ej: A0303" formControlName="codigoAula">
+                                </div>
+                                <div class="form-text text-muted mb-2">
+                                    Formato: Una letra (A-D) seguida de 4 dígitos (Ej: A0303).
+                                </div>
+
+                                <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['required']"
+                                    class="text-danger small mt-1">
+                                    El código de aula es requerido.
+                                </div>
+                                <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['pattern']"
+                                    class="text-danger small mt-1">
+                                    Formato inválido. Debe ser una letra (A-D) y 4 dígitos (Ej: A0303).
+                                </div>
+                            </div>
+
+                            <div *ngIf="mensajeExito" class="alert alert-success text-center py-2">{{ mensajeExito }}
+                            </div>
+                            <div *ngIf="mensajeError" class="alert alert-danger text-center py-2">{{ mensajeError }}
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg fw-bold"
+                                    [disabled]="locationForm.invalid">
+                                    <i class="fa-solid fa-save me-2"></i> Guardar Ubicación
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
 
-                <div class="card-body p-5">
-                    <form [formGroup]="locationForm" (ngSubmit)="onSubmit()">
-
-                        <div class="mb-4">
-                            <label class="form-label fw-bold text-muted">Piso:</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Ej: Tercer Piso"
-                                formControlName="pisoDescripcion">
-                            <div *ngIf="locationForm.get('pisoDescripcion')?.touched && locationForm.get('pisoDescripcion')?.invalid"
-                                class="text-danger small mt-1">
-                                Debes ingresar una descripción del piso.
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label fw-bold text-muted">Código de Aula:</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Ej: A0303"
-                                formControlName="codigoAula">
-                            <div class="form-text text-muted">Formato esperado: Una letra (A-D) seguida de 4 dígitos
-                                (Ej: A0303).</div>
-
-                            <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['required']"
-                                class="text-danger small mt-1">
-                                El código es requerido.
-                            </div>
-                            <div *ngIf="locationForm.get('codigoAula')?.touched && locationForm.get('codigoAula')?.errors?.['pattern']"
-                                class="text-danger small mt-1">
-                                Formato inválido. Usa Mayúscula + 4 números (Ej: A0303).
-                            </div>
-                        </div>
-
-                        <div *ngIf="mensajeExito" class="alert alert-success text-center">{{ mensajeExito }}</div>
-                        <div *ngIf="mensajeError" class="alert alert-danger text-center">{{ mensajeError }}</div>
-
-                        <div class="d-grid mt-5">
-                            <button type="submit" class="btn btn-primary btn-lg fw-bold"
-                                [disabled]="locationForm.invalid">
-                                Guardar Ubicación
-                            </button>
-                        </div>
-
-                    </form>
-                </div>
             </div>
-
         </div>
     </div>
 </div>
