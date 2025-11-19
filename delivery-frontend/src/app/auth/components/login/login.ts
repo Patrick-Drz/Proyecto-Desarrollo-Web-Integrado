@@ -1,11 +1,40 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth'; 
 
 @Component({
   selector: 'app-login',
-  standalone: false,
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './login.html',      
+  styleUrls: ['./login.scss']       
 })
-export class Login {
+export class LoginComponent {
+  loginForm: FormGroup;
+  errorMessage: string = '';
 
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
+    this.loginForm = this.fb.group({
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required]]
+    });
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => {
+          this.router.navigate(['/']); 
+        },
+        error: (err) => {
+          this.errorMessage = 'Credenciales incorrectas. Inténtalo de nuevo.';
+        }
+      });
+    } else {
+      this.loginForm.markAllAsTouched();
+    }
+  }
 }
