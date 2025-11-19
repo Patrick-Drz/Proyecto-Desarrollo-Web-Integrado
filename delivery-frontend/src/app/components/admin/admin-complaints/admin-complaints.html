@@ -1,31 +1,42 @@
 <div class="container-fluid p-4">
   <h2 class="mb-4">Gestión de Reclamaciones</h2>
-  <button class="btn btn-warning mb-3 fw-bold"><i class="fa-solid fa-file-csv me-2"></i>Descargar Reporte (Excel)</button>
-
+  
   <div class="card shadow-sm">
     <div class="card-body p-0">
-      <table class="table table-striped table-hover mb-0">
-        <thead class="table-dark">
-          <tr>
-            <th>ID</th>
-            <th>Nombre Completo</th>
-            <th>Correo</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Fecha Creación</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let rec of reclamaciones">
-            <td>{{rec.id}}</td>
-            <td>{{rec.nombre}}</td>
-            <td>{{rec.correo}}</td>
-            <td class="text-uppercase">{{rec.tipo}}</td>
-            <td>{{rec.descripcion}}</td>
-            <td>{{rec.fecha}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rec of reclamaciones">
+              <td>{{rec.id}}</td>
+              <td class="fw-bold">{{rec.usuario?.nombreCompleto || 'Anónimo'}}</td>
+              <td>{{rec.usuario?.correo}}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                    'bg-danger': rec.tipoReclamacion === 'QUEJA',
+                    'bg-warning text-dark': rec.tipoReclamacion === 'RECLAMO',
+                    'bg-info text-dark': rec.tipoReclamacion === 'SUGERENCIA'
+                }">{{rec.tipoReclamacion}}</span>
+              </td>
+              <td>{{rec.descripcion}}</td>
+              <td>{{rec.fechaCreacion | date:'short'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div *ngIf="reclamaciones.length === 0" class="text-center py-4 text-muted">
+        No hay reclamaciones registradas.
+      </div>
     </div>
   </div>
 </div>

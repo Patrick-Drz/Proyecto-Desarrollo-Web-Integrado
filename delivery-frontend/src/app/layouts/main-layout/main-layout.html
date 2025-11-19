@@ -19,7 +19,6 @@
 
             <div class="col-md-4 mb-4 text-center">
                 <h5 class="footer-title">Síguenos</h5>
-                <p class="footer-text mb-3">Mantente al tanto de nuestras últimas ofertas y noticias.</p>
                 <div class="social-icons">
                     <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
@@ -31,7 +30,7 @@
             <div class="col-md-4 mb-4 text-md-end text-center">
                 <h5 class="footer-title">¿Tienes algún problema?</h5>
                 <p class="footer-text">Si tienes alguna queja, sugerencia o reclamación, no dudes en contactarnos.</p>
-                <button class="btn btn-warning btn-sm mt-2 fw-bold">
+                <button class="btn btn-warning btn-sm mt-2 fw-bold" (click)="abrirModalReclamacion(modalReclamacion)">
                     <i class="fa-solid fa-book me-2"></i>Libro de Reclamaciones
                 </button>
             </div>
@@ -39,3 +38,35 @@
         </div>
     </div>
 </footer>
+
+<ng-template #modalReclamacion let-modal>
+    <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title"><i class="fa-solid fa-book-open me-2"></i>Libro de Reclamaciones</h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="complaintForm">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Tipo:</label>
+                <select class="form-select" formControlName="tipoReclamacion">
+                    <option value="QUEJA">Queja (Malestar por el servicio)</option>
+                    <option value="RECLAMO">Reclamo (Disconformidad con producto)</option>
+                    <option value="SUGERENCIA">Sugerencia</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Descripción:</label>
+                <textarea class="form-control" rows="4" formControlName="descripcion" placeholder="Detalle lo sucedido..."></textarea>
+                <div *ngIf="complaintForm.get('descripcion')?.touched && complaintForm.get('descripcion')?.invalid" class="text-danger small mt-1">
+                    La descripción es obligatoria y debe tener al menos 10 caracteres.
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancelar</button>
+        <button type="button" class="btn btn-warning fw-bold" [disabled]="complaintForm.invalid" (click)="enviarReclamacion()">
+            <i class="fa-solid fa-paper-plane me-2"></i>Enviar
+        </button>
+    </div>
+</ng-template>

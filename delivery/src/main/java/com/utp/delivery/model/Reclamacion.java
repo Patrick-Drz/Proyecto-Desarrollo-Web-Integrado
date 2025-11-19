@@ -13,15 +13,18 @@ public class Reclamacion {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_orden_venta")
+    @JoinColumn(name = "id_orden_venta", nullable = true)
     private OrdenVenta ordenVenta;
 
     private String tipoReclamacion;
+    
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
+    
     private LocalDateTime fechaCreacion;
-    private String estado;
+    private String estado; 
 }
