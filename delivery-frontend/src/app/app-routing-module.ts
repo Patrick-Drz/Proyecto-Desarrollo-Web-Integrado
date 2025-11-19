@@ -16,6 +16,10 @@ const routes: Routes = [
     component: AdminLayout,
     children: [
       { path: 'dashboard', component: Dashboard },
+      { path: 'products', component: AdminProducts },
+      { path: 'offers', component: AdminOffers },
+      { path: 'orders', component: AdminSales },
+      { path: 'complaints', component: AdminComplaints },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

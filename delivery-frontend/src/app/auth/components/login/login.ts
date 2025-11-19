@@ -30,7 +30,7 @@ export class LoginComponent {
         next: () => {
           const role = this.authService.getRoleFromToken();
           
-          if (role === 'ADMIN') {
+          if (role === 'ADMIN' || role === 'ADMINISTRADOR') {
             this.router.navigate(['/admin/dashboard']);
           } else {
             if (role !== 'CLIENTE') alert('Rol detectado: ' + role); 

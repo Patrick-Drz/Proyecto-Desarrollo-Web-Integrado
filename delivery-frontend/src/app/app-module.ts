@@ -18,6 +18,10 @@ import { Dashboard } from './components/admin/dashboard/dashboard';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { AuthInterceptor } from './core/interceptors/auth-interceptor';
+import { AdminProducts } from './components/admin/admin-products/admin-products';
+import { AdminOffers } from './components/admin/admin-offers/admin-offers';
+import { AdminSales } from './components/admin/admin-sales/admin-sales';
+import { AdminComplaints } from './components/admin/admin-complaints/admin-complaints';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { AuthInterceptor } from './core/interceptors/auth-interceptor';
     OrdersComponent,
     Dashboard,
     MainLayout,
-    AdminLayout
+    AdminLayout,
+    AdminProducts,
+    AdminOffers,
+    AdminSales,
+    AdminComplaints
   ],
   imports: [
     BrowserModule,
