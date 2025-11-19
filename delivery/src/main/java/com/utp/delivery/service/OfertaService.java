@@ -1,7 +1,7 @@
 package com.utp.delivery.service;
 
 import com.utp.delivery.model.Oferta;
-import com.utp.delivery.repository.OfertaRepository; // Asegúrate de tener este repositorio creado, si no, créalo igual que ProductoRepository
+import com.utp.delivery.repository.OfertaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,12 @@ public class OfertaService {
 
     @Transactional(readOnly = true)
     public List<Oferta> obtenerTodas() {
-        return ofertaRepository.findAll();
+        return ofertaRepository.findByActivaTrue();
     }
 
     @Transactional
     public Oferta crear(Oferta oferta) {
+        oferta.setActiva(true);
         return ofertaRepository.save(oferta);
     }
 
@@ -41,9 +42,10 @@ public class OfertaService {
 
     @Transactional
     public void eliminar(Long id) {
-        if (!ofertaRepository.existsById(id)) {
-            throw new EntityNotFoundException("Oferta no encontrada");
-        }
-        ofertaRepository.deleteById(id);
+        Oferta oferta = ofertaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Oferta no encontrada"));
+        
+        oferta.setActiva(false);
+        ofertaRepository.save(oferta);
     }
 }

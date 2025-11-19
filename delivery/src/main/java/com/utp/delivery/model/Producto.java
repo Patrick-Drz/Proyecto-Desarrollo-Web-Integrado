@@ -22,6 +22,9 @@ public class Producto {
     private int stock;
     private String rutaImagen;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean activo = true;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonManagedReference("combo-componente")
