@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   usuario: any = {
     nombre: 'Cargando...',
-    email: '',
+    email: '...',
     codigo: '---'
   };
   direcciones: Direccion[] = [];
@@ -42,10 +42,10 @@ export class ProfileComponent implements OnInit {
         };
       },
       error: (err) => {
-        console.error('Error obteniendo perfil:', err);
+        console.error('Error perfil:', err);
         this.usuario = {
-          nombre: 'Error de Carga',
-          email: 'Por favor, inicia sesión nuevamente.',
+          nombre: 'Error al cargar',
+          email: 'Inicia sesión nuevamente',
           codigo: '---'
         };
       }

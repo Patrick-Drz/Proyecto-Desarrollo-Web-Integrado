@@ -40,7 +40,6 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me`);
   }
 
-
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.userRoleSubject.next(null);
