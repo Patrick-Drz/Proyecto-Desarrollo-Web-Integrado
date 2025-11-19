@@ -4,6 +4,7 @@ import { OrderService } from '../../../core/services/order';
 @Component({
   selector: 'app-admin-sales',
   templateUrl: './admin-sales.html',
+  styleUrls: ['./admin-sales.scss'],
   standalone: false
 })
 export class AdminSales implements OnInit {
@@ -13,10 +14,11 @@ export class AdminSales implements OnInit {
   constructor(private orderService: OrderService) { }
 
   ngOnInit(): void {
-    // Usamos el servicio existente. En un caso real, este endpoint debería traer TODAS las ventas, no solo las del usuario.
-    // Supondremos que el backend ha sido ajustado o que usamos este para la demo.
-    this.orderService.obtenerMisOrdenes().subscribe(data => {
-        this.ventas = data; 
+    this.orderService.obtenerTodasLasOrdenes().subscribe({
+      next: (data) => {
+        this.ventas = data.reverse();
+      },
+      error: (err) => console.error('Error al cargar ventas:', err)
     });
   }
 

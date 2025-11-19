@@ -51,4 +51,8 @@ public class OrdenVentaService {
     public List<OrdenVenta> obtenerOrdenesPorUsuario(Long idUsuario) {
         return ordenVentaRepository.findByUsuarioId(idUsuario);
     }
+    @Transactional(readOnly = true)
+    public List<OrdenVenta> obtenerTodasLasOrdenes() {
+        return ordenVentaRepository.findAll();
+    }
 }

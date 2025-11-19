@@ -18,6 +18,11 @@ export interface Orden {
   fechaOrden: string;
   total: number;
   estado: string;
+  usuario?: {
+    nombreCompleto: string;
+    codigoEstudiante: string;
+    correo: string;
+  };
   direccionEntrega: {
     torre: string;
     piso: number;
@@ -39,6 +44,10 @@ export class OrderService {
   }
 
   obtenerMisOrdenes(): Observable<Orden[]> {
-    return this.http.get<Orden[]>(this.apiUrl);
+    return this.http.get<Orden[]>(`${this.apiUrl}/mis-ordenes`);
+  }
+
+  obtenerTodasLasOrdenes(): Observable<Orden[]> {
+    return this.http.get<Orden[]>(`${this.apiUrl}/todas`);
   }
 }

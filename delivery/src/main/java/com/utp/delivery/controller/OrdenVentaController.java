@@ -23,9 +23,20 @@ public class OrdenVentaController {
         OrdenVenta nuevaOrden = ordenVentaService.crearOrdenDesdeCarrito(usuario.getId(), ordenRequest);
         return new ResponseEntity<>(nuevaOrden, HttpStatus.CREATED);
     }
-    @GetMapping
+
+    @GetMapping("/mis-ordenes")
     public ResponseEntity<List<OrdenVenta>> obtenerMisOrdenes(@AuthenticationPrincipal Usuario usuario) {
         List<OrdenVenta> ordenes = ordenVentaService.obtenerOrdenesPorUsuario(usuario.getId());
         return ResponseEntity.ok(ordenes);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrdenVenta>> obtenerOrdenes(@AuthenticationPrincipal Usuario usuario) {
+        return obtenerMisOrdenes(usuario);
+    }
+
+    @GetMapping("/todas")
+    public ResponseEntity<List<OrdenVenta>> listarTodasLasOrdenes() {
+        return ResponseEntity.ok(ordenVentaService.obtenerTodasLasOrdenes());
     }
 }
