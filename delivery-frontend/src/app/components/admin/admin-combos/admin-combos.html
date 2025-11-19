@@ -1,0 +1,71 @@
+<div class="container-fluid p-4">
+    <h2 class="fw-bold mb-4">Configurador de Combos</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">
+                    <i class="fa-solid fa-layer-group me-2"></i>Vincular Productos
+                </div>
+                <div class="card-body p-4">
+                    
+                    <div class="alert alert-info small mb-4">
+                        <i class="fa-solid fa-circle-info me-2"></i>
+                        <strong>Instrucciones:</strong> Primero crea un producto (ej: "Combo Familiar") en la sección de Productos. 
+                        Luego, úsalo aquí como "Producto Principal" y añádele sus componentes (ej: "Hamburguesa", "Gaseosa").
+                    </div>
+
+                    <form [formGroup]="comboForm" (ngSubmit)="onSubmit()">
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-primary">1. Selecciona el Producto "Combo" (Padre)</label>
+                            <select class="form-select form-select-lg" formControlName="idProductoPadre">
+                                <option value="" disabled>-- Elige el producto que será el combo --</option>
+                                <option *ngFor="let p of productos" [value]="p.id">
+                                    {{ p.nombre }} (ID: {{p.id}})
+                                </option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-success">2. Selecciona el Componente a añadir (Hijo)</label>
+                            <select class="form-select" formControlName="idProductoHijo">
+                                <option value="" disabled>-- Elige el producto a incluir --</option>
+                                <option *ngFor="let p of productos" [value]="p.id">
+                                    {{ p.nombre }} - Stock: {{p.stock}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">3. Cantidad</label>
+                            <input type="number" class="form-control" formControlName="cantidad" min="1">
+                            <div class="form-text">Cuántas unidades de este componente van en el combo.</div>
+                        </div>
+
+                        <div *ngIf="mensajeExito" class="alert alert-success py-2">{{ mensajeExito }}</div>
+                        <div *ngIf="mensajeError" class="alert alert-danger py-2">{{ mensajeError }}</div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary fw-bold" [disabled]="comboForm.invalid">
+                                <i class="fa-solid fa-link me-2"></i> Agregar al Combo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+             <div class="card bg-light border-0 h-100 d-flex align-items-center justify-content-center text-muted p-5">
+                <div class="text-center">
+                    <i class="fa-solid fa-burger fa-4x mb-3 opacity-25"></i>
+                    <h5>Vista Previa</h5>
+                    <p>Selecciona los productos a la izquierda para armar tus promociones.</p>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>

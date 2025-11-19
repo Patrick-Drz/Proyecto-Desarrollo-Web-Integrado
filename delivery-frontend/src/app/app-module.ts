@@ -23,6 +23,7 @@ import { AdminSales } from './components/admin/admin-sales/admin-sales';
 import { AdminComplaints } from './components/admin/admin-complaints/admin-complaints';
 import { AboutComponent } from './components/about/about';
 import { ProfileComponent } from './components/profile/profile';
+import { AdminCombos } from './components/admin/admin-combos/admin-combos';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ProfileComponent } from './components/profile/profile';
     AdminSales,
     AdminComplaints,
     AboutComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminCombos
   ],
   imports: [
     BrowserModule,

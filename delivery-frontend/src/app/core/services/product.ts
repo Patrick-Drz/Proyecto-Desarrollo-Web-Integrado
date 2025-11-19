@@ -10,6 +10,12 @@ export interface Producto {
   precio: number;
   stock: number;
   rutaImagen: string;
+  componentesCombo?: {
+    cantidad: number;
+    productoHijo: {
+      nombre: string;
+    }
+  }[];
 }
 
 @Injectable({

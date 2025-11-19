@@ -18,6 +18,7 @@ import { ProfileComponent } from './components/profile/profile';
 import { adminGuard } from './core/guards/admin-guard';
 import { clientGuard } from './core/guards/client-guard';
 import { authGuard } from './core/guards/auth-guard';
+import { AdminCombos } from './components/admin/admin-combos/admin-combos';
 
 const routes: Routes = [
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: 'offers', component: AdminOffers },
       { path: 'orders', component: AdminSales },
       { path: 'complaints', component: AdminComplaints },
+      { path: 'combos', component: AdminCombos },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
