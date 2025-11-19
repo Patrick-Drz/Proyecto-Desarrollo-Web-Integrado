@@ -1,0 +1,72 @@
+.section-title {
+  font-weight: 700;
+  color: #333;
+  border-left: 5px solid #2c6ae5;
+  padding-left: 15px;
+}
+
+.product-card {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  .card-img-wrapper {
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+  }
+
+  &:hover .card-img-wrapper img {
+    transform: scale(1.05);
+  }
+}
+
+.offer-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  border-left: 4px solid #28a745; 
+  
+  &:hover {
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.1);
+  }
+}
+
+.quantity-input {
+  width: 70px;
+  text-align: center;
+}
+
+.x-small {
+  font-size: 0.75rem;
+}
+
+.btn-primary {
+  background-color: #2c6ae5;
+  border-color: #2c6ae5;
+  
+  &:hover {
+    background-color: #1a54c7;
+    border-color: #1a54c7;
+  }
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}

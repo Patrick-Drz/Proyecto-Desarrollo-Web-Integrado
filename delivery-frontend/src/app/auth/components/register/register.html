@@ -1,33 +1,48 @@
-<div class="container-auth active" id="container">
-  <div class="form-container sign-up">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <h1>Crear Cuenta</h1>
-      <div class="social-icons">
-        <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-        <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-        <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-      </div>
-      <span>o usa tu correo electrónico para registrarte</span>
-      
-      <input type="text" placeholder="Nombre Completo" formControlName="nombreCompleto">
-      <input type="text" placeholder="Código de Estudiante (Ej: U12345678)" formControlName="codigoEstudiante">
-      <input type="email" placeholder="Correo" formControlName="correo">
-      <input type="password" placeholder="Contraseña" formControlName="contrasena">
-      
-      <div *ngIf="errorMessage" class="alert alert-danger mt-2 w-100">{{ errorMessage }}</div>
-
-      <button type="submit">REGISTRARSE</button>
-    </form>
-  </div>
-
-  <div class="toggle-container">
-    <div class="toggle">
-      <div class="toggle-panel toggle-left">
-        <h1>¡Bienvenido de Nuevo!</h1>
-        <p>Ingresa tus datos para acceder a nuestra página</p>
-        <button class="hidden" routerLink="/auth/login">INICIAR SESIÓN</button>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    
+    <div class="auth-info-side-left bg-gradient-primary">
+      <div class="text-center text-white px-4">
+        <h2 class="fw-bold mb-3">¡Bienvenido de Nuevo!</h2>
+        <p class="mb-4">Ingresa tus datos para acceder a nuestra página y realizar tus pedidos.</p>
+        <button class="btn btn-outline-light btn-switch" routerLink="/auth/login">INICIAR SESIÓN</button>
       </div>
     </div>
+
+    <div class="auth-form-side">
+      <h2 class="auth-title">Crear Cuenta</h2>
+      
+      <div class="social-buttons">
+        <button class="btn-social"><i class="fa-brands fa-google"></i></button>
+        <button class="btn-social"><i class="fa-brands fa-facebook-f"></i></button>
+        <button class="btn-social"><i class="fa-brands fa-github"></i></button>
+        <button class="btn-social"><i class="fa-brands fa-linkedin-in"></i></button>
+      </div>
+      
+      <p class="auth-subtitle">o usa tu correo electrónico para registrarte</p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="w-100">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Nombre Completo" formControlName="nombreCompleto">
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Código de Estudiante (Ej: U12345678)" formControlName="codigoEstudiante">
+        </div>
+
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Correo" formControlName="correo">
+        </div>
+        
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Contraseña" formControlName="contrasena">
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger py-2 small">{{ errorMessage }}</div>
+
+        <button type="submit" class="btn btn-primary btn-auth" [disabled]="registerForm.invalid">REGISTRARSE</button>
+      </form>
+    </div>
+
   </div>
 </div>

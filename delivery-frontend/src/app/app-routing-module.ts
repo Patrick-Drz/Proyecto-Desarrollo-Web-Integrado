@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { Home } from './components/home/home';
+import { Menu } from './components/menu/menu';
 import { NotFound } from './components/not-found/not-found';
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
     component: MainLayout,
     children: [
       { path: '', component: Home },
+      { path: 'menu', component: Menu },
       { path: 'auth', loadChildren: () => import('./auth/auth-module').then(m => m.AuthModule) }
     ]
   },
