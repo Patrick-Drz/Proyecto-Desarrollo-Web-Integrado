@@ -38,19 +38,26 @@ export class AdminCombos implements OnInit {
     });
   }
 
+  get combosExistentes() {
+    return this.productos.filter(p => p.componentesCombo && p.componentesCombo.length > 0);
+  }
+
   onSubmit() {
     if (this.comboForm.valid) {
       this.comboService.agregarComponente(this.comboForm.value).subscribe({
         next: () => {
           this.mensajeExito = '¡Componente agregado al combo correctamente!';
           this.mensajeError = '';
+          
           this.comboForm.patchValue({ idProductoHijo: '', cantidad: 1 });
           
+          this.cargarProductos();
+
           setTimeout(() => this.mensajeExito = '', 3000);
         },
         error: (err) => {
           console.error(err);
-          this.mensajeError = 'Error al crear la relación. Verifica que los productos existan.';
+          this.mensajeError = 'Error al crear la relación. Verifica los datos.';
           this.mensajeExito = '';
         }
       });

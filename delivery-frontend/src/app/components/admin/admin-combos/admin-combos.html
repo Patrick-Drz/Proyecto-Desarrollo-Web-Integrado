@@ -2,7 +2,7 @@
     <h2 class="fw-bold mb-4">Configurador de Combos</h2>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4 mb-md-0">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white fw-bold">
                     <i class="fa-solid fa-layer-group me-2"></i>Vincular Productos
@@ -59,13 +59,37 @@
         </div>
 
         <div class="col-md-6">
-             <div class="card bg-light border-0 h-100 d-flex align-items-center justify-content-center text-muted p-5">
-                <div class="text-center">
-                    <i class="fa-solid fa-burger fa-4x mb-3 opacity-25"></i>
-                    <h5>Vista Previa</h5>
-                    <p>Selecciona los productos a la izquierda para armar tus promociones.</p>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-info text-white fw-bold">
+                    <i class="fa-solid fa-list-ul me-2"></i>Combos Existentes
                 </div>
-             </div>
+                <div class="card-body p-0" style="max-height: 600px; overflow-y: auto;">
+                    
+                    <div *ngIf="combosExistentes.length === 0" class="text-center text-muted p-5">
+                        <i class="fa-solid fa-burger fa-3x mb-3 opacity-25"></i>
+                        <p>Aún no has armado ningún combo.</p>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item p-3" *ngFor="let combo of combosExistentes">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-primary mb-0">{{ combo.nombre }}</h6>
+                                <span class="badge bg-success">S/ {{ combo.precio | number:'1.2-2' }}</span>
+                            </div>
+                            
+                            <div class="bg-light p-2 rounded border">
+                                <small class="text-muted fw-bold d-block mb-1">Contenido:</small>
+                                <ul class="mb-0 ps-3 small">
+                                    <li *ngFor="let comp of combo.componentesCombo">
+                                        {{ comp.cantidad }}x {{ comp.productoHijo.nombre }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
