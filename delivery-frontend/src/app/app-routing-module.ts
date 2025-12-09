@@ -19,6 +19,7 @@ import { adminGuard } from './core/guards/admin-guard';
 import { clientGuard } from './core/guards/client-guard';
 import { authGuard } from './core/guards/auth-guard';
 import { AdminCombos } from './components/admin/admin-combos/admin-combos';
+import {AdminUsersComponent} from './components/admin/admin-users/admin-users';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: 'orders', component: AdminSales },
       { path: 'complaints', component: AdminComplaints },
       { path: 'combos', component: AdminCombos },
+      { path: 'users', component: AdminUsersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

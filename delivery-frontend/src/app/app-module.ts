@@ -24,6 +24,8 @@ import { AdminComplaints } from './components/admin/admin-complaints/admin-compl
 import { AboutComponent } from './components/about/about';
 import { ProfileComponent } from './components/profile/profile';
 import { AdminCombos } from './components/admin/admin-combos/admin-combos';
+
+import {AdminUsersComponent} from './components/admin/admin-users/admin-users';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
@@ -45,7 +47,9 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     AdminComplaints,
     AboutComponent,
     ProfileComponent,
-    AdminCombos
+    AdminCombos,
+    AdminUsersComponent
+
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,7 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    BaseChartDirective 
+    BaseChartDirective
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

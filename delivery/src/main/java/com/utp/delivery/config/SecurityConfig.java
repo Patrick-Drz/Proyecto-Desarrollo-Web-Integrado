@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -37,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/ofertas/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/ofertas/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/ofertas/**").authenticated()
+
+                        .requestMatchers("/api/admin/**").hasAnyAuthority("ADMINISTRADOR", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

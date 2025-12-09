@@ -1,0 +1,33 @@
+.card {
+  border-radius: 0.5rem;
+}
+
+.text-xs {
+  font-size: .7rem;
+}
+
+.bg-primary-subtle {
+  background-color: #cfe2ff;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  color: #858796;
+}
+
+.btn-link {
+  text-decoration: none;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #2c6ae5;
+  box-shadow: 0 0 0 0.2rem rgba(44, 106, 229, 0.15);
+}

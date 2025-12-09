@@ -1,23 +1,55 @@
 <div class="admin-wrapper">
-    <aside class="sidebar">
-        <div class="logo">Delivery UTP Admin</div>
-        <nav>
-            <ul>
-                <li><a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a></li>
-                <li><a routerLink="/admin/products" routerLinkActive="active">Productos</a></li>
-                <li><a routerLink="/admin/combos" routerLinkActive="active">Armar Combos</a></li>
-                <li><a routerLink="/admin/offers" routerLinkActive="active">Ofertas</a></li>
-                <li><a routerLink="/admin/orders" routerLinkActive="active">Ventas</a></li>
-                <li><a routerLink="/admin/complaints" routerLinkActive="active">Reclamaciones</a></li>
-                <li class="mt-5">
-                    <a class="text-danger fw-bold" style="cursor: pointer;" (click)="logout()">
-                        <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    <main class="admin-content">
-        <router-outlet></router-outlet>
-    </main>
+  <aside class="sidebar">
+    <div class="logo">Delivery UTP Admin</div>
+    <nav>
+      <ul>
+        <li>
+          <a routerLink="/admin/dashboard" routerLinkActive="active">
+            <i class="fa-solid fa-chart-line me-2"></i>Dashboard
+          </a>
+        </li>
+
+        <li>
+          <a routerLink="/admin/users" routerLinkActive="active">
+            <i class="fa-solid fa-users me-2"></i>Usuarios
+          </a>
+        </li>
+
+        <li>
+          <a routerLink="/admin/products" routerLinkActive="active">
+            <i class="fa-solid fa-burger me-2"></i>Productos
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/combos" routerLinkActive="active">
+            <i class="fa-solid fa-layer-group me-2"></i>Armar Combos
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/offers" routerLinkActive="active">
+            <i class="fa-solid fa-tags me-2"></i>Ofertas
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/orders" routerLinkActive="active">
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i>Ventas
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin/complaints" routerLinkActive="active">
+            <i class="fa-solid fa-bullhorn me-2"></i>Reclamaciones
+          </a>
+        </li>
+
+        <li class="mt-5">
+          <a class="text-danger fw-bold" style="cursor: pointer;" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
