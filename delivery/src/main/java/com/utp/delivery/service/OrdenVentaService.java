@@ -3,9 +3,9 @@ package com.utp.delivery.service;
 import com.utp.delivery.dto.CrearOrdenRequest;
 import com.utp.delivery.model.*;
 import com.utp.delivery.repository.DireccionRepository;
-import com.utp.delivery.repository.OfertaRepository;   
+import com.utp.delivery.repository.OfertaRepository;
 import com.utp.delivery.repository.OrdenVentaRepository;
-import com.utp.delivery.repository.ProductoRepository; 
+import com.utp.delivery.repository.ProductoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,10 +40,8 @@ public class OrdenVentaService {
                 if (prod.getStock() < item.getCantidad()) {
                     throw new IllegalStateException("Stock insuficiente para el producto: " + prod.getNombre());
                 }
-                
                 int nuevoStock = prod.getStock() - item.getCantidad();
                 prod.setStock(nuevoStock);
-                
                 if (nuevoStock == 0) {
                     prod.setActivo(false);
                 }
@@ -54,10 +52,8 @@ public class OrdenVentaService {
                 if (oferta.getStock() < item.getCantidad()) {
                     throw new IllegalStateException("Stock insuficiente para la oferta: " + oferta.getNombreOferta());
                 }
-                
                 int nuevoStock = oferta.getStock() - item.getCantidad();
                 oferta.setStock(nuevoStock);
-                
                 if (nuevoStock == 0) {
                     oferta.setActiva(false);
                 }
@@ -114,5 +110,13 @@ public class OrdenVentaService {
     @Transactional(readOnly = true)
     public List<OrdenVenta> obtenerTodasLasOrdenes() {
         return ordenVentaRepository.findAll();
+    }
+
+    @Transactional
+    public OrdenVenta cambiarEstado(Long idOrden, String nuevoEstado) {
+        OrdenVenta orden = ordenVentaRepository.findById(idOrden)
+                .orElseThrow(() -> new EntityNotFoundException("Orden no encontrada"));
+        orden.setEstado(nuevoEstado);
+        return ordenVentaRepository.save(orden);
     }
 }

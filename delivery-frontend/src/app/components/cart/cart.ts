@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService, Carrito } from '../../core/services/cart';
+import { CartService, Carrito, ItemCarrito } from '../../core/services/cart'; 
 import { LocationService } from '../../core/services/location';
 import { OrderService } from '../../core/services/order';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ export class CartComponent implements OnInit {
     aula: '---'
   };
   idDireccion: number | null = null;
+  loading = false; 
 
   constructor(
     private cartService: CartService,
@@ -82,5 +83,44 @@ export class CartComponent implements OnInit {
         }
       });
     }
+  }
+
+  incrementarCantidad(item: ItemCarrito) {
+    this.actualizarItem(item, 1);
+  }
+
+  decrementarCantidad(item: ItemCarrito) {
+    if (item.cantidad > 1) {
+      this.actualizarItem(item, -1);
+    } else {
+      this.eliminarItem(item);
+    }
+  }
+
+  actualizarItem(item: ItemCarrito, cantidad: number) {
+    const idProd = item.producto?.id || null;
+    const idOfer = item.oferta?.id || null;
+    
+    this.loading = true;
+    this.cartService.agregarItem(idProd, cantidad, idOfer).subscribe({
+        next: () => this.loading = false,
+        error: () => {
+            alert('Error al actualizar'); 
+            this.loading = false;
+        }
+    });
+  }
+
+  eliminarItem(item: ItemCarrito) {
+    if(!confirm('¿Eliminar este producto?')) return;
+    
+    this.loading = true;
+    this.cartService.eliminarItem(item.id).subscribe({
+        next: () => this.loading = false,
+        error: () => {
+            alert('Error al eliminar');
+            this.loading = false;
+        }
+    });
   }
 }

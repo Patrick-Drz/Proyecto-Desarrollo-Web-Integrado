@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { AuthService } from '../../auth/services/auth';
 
 export interface UsuarioCarrito {
@@ -41,6 +41,13 @@ export class CartService {
   
   cart$ = this.cartSubject.asObservable();
 
+  cartCount$ = this.cartSubject.asObservable().pipe(
+    map(carrito => {
+      if (!carrito || !carrito.items) return 0;
+      return carrito.items.reduce((acc, item) => acc + item.cantidad, 0);
+    })
+  );
+
   constructor(private http: HttpClient, private authService: AuthService) {
     this.authService.userRole$.subscribe(role => {
       if (role) {
@@ -66,6 +73,12 @@ export class CartService {
     if (idOferta) payload.idOferta = idOferta;
 
     return this.http.post<Carrito>(`${this.apiUrl}/items`, payload).pipe(
+      tap(carrito => this.calcularTotal(carrito))
+    );
+  }
+
+  eliminarItem(idItem: number): Observable<Carrito> {
+    return this.http.delete<Carrito>(`${this.apiUrl}/items/${idItem}`).pipe(
       tap(carrito => this.calcularTotal(carrito))
     );
   }

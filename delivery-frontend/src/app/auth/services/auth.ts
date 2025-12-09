@@ -16,7 +16,7 @@ export interface UserProfile {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = 'http://localhost:8080/api/auth'; 
   private tokenKey = 'auth_token';
   
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
@@ -80,5 +80,13 @@ export class AuthService {
     } catch (error) {
       return null;
     }
+  }
+
+  solicitarRecuperacion(correo: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { correo });
+  }
+
+  cambiarContrasena(token: string, nuevaContrasena: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, nuevaContrasena });
   }
 }

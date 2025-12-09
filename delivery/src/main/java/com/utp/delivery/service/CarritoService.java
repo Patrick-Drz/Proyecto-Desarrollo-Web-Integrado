@@ -71,6 +71,19 @@ public class CarritoService {
         return carritoRepository.save(carrito);
     }
 
+    @Transactional
+    public Carrito eliminarItemDelCarrito(Long idUsuario, Long idItemCarrito) {
+        Carrito carrito = obtenerOCrearCarrito(idUsuario);
+        
+        boolean eliminado = carrito.getItems().removeIf(item -> item.getId().equals(idItemCarrito));
+        
+        if (eliminado) {
+            carrito.setFechaActualizacion(LocalDateTime.now());
+            return carritoRepository.save(carrito);
+        }
+        return carrito;
+    }
+
     private BigDecimal calcularPrecioOferta(Oferta oferta) {
         if (oferta.getTipoDescuento() == Oferta.TipoDescuento.MONTO_FIJO) {
             return oferta.getPrecioRegular().subtract(oferta.getValorDescuento());

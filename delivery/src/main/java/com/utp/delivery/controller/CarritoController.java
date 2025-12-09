@@ -21,9 +21,22 @@ public class CarritoController {
         Carrito carrito = carritoService.obtenerCarritoPorUsuario(usuario.getId());
         return ResponseEntity.ok(carrito);
     }
+    
     @PostMapping("/items")
     public ResponseEntity<Carrito> agregarItem(@AuthenticationPrincipal Usuario usuario, @RequestBody AddItemRequest itemRequest) {
         Carrito carritoActualizado = carritoService.agregarItemACarrito(usuario.getId(), itemRequest);
         return ResponseEntity.ok(carritoActualizado);
+    }
+
+    @DeleteMapping("/items/{idItem}")
+    public ResponseEntity<Carrito> eliminarItem(@AuthenticationPrincipal Usuario usuario, @PathVariable Long idItem) {
+        Carrito carritoActualizado = carritoService.eliminarItemDelCarrito(usuario.getId(), idItem);
+        return ResponseEntity.ok(carritoActualizado);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> vaciarCarrito(@AuthenticationPrincipal Usuario usuario) {
+        carritoService.limpiarCarrito(usuario.getId());
+        return ResponseEntity.noContent().build();
     }
 }

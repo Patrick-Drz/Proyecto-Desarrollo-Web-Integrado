@@ -37,13 +37,22 @@
                             </td>
 
                             <td class="fw-bold text-success">S/ {{ orden.total | number:'1.2-2' }}</td>
+                            
                             <td>
-                                <span class="badge rounded-pill" [ngClass]="{
-                                    'bg-warning text-dark': orden.estado === 'PENDIENTE',
-                                    'bg-success': orden.estado === 'ENTREGADO',
-                                    'bg-danger': orden.estado === 'CANCELADO'
-                                }">{{ orden.estado }}</span>
+                                <select class="form-select form-select-sm fw-bold text-white border-0" 
+                                        [ngClass]="{
+                                            'bg-warning': orden.estado === 'PENDIENTE',
+                                            'bg-success': orden.estado === 'ENTREGADO',
+                                            'bg-danger': orden.estado === 'CANCELADO'
+                                        }"
+                                        [(ngModel)]="orden.estado"
+                                        (change)="actualizarEstado(orden)">
+                                    <option value="PENDIENTE" class="bg-white text-dark">PENDIENTE</option>
+                                    <option value="ENTREGADO" class="bg-white text-dark">ENTREGADO</option>
+                                    <option value="CANCELADO" class="bg-white text-dark">CANCELADO</option>
+                                </select>
                             </td>
+
                             <td>
                                 <button class="btn btn-primary btn-sm me-2" (click)="verDetalles(orden)">
                                     <i class="fa-solid fa-eye"></i> Detalles

@@ -14,9 +14,14 @@
         <li class="nav-item"><a class="nav-link" routerLink="/about" routerLinkActive="active">Nosotros</a></li>
       </ul>
       <div class="d-flex align-items-center gap-3">
+        
         <a routerLink="/cart" class="btn-cart position-relative">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+          
+          <span *ngIf="cartItemCount > 0" 
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ cartItemCount }}
+          </span>
         </a>
         
         <ng-container *ngIf="isLoggedIn; else loginTemplate">

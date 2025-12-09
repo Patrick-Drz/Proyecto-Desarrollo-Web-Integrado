@@ -3,40 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface DetalleOrden {
-  id: number;
-  producto?: {
-    id: number;
-    nombre: string;
-    rutaImagen: string;
-    precio: number;
-  };
-  oferta?: {
-    id: number;
-    nombreOferta: string;
-    descripcionOferta: string;
-    precioOferta: number;
-  };
+  id?: number;
+  producto?: { nombre: string; rutaImagen: string };
+  oferta?: { nombreOferta: string; rutaImagen?: string };
   cantidad: number;
   precioUnitarioAlMomento: number;
 }
 
 export interface Orden {
   id: number;
-  fechaOrden: string; 
+  fechaOrden: string;
   total: number;
-  igv: number;
+  igv?: number;
   estado: string;
-  usuario?: {
-    nombreCompleto: string;
-    codigoEstudiante: string;
-    correo: string;
-  };
-  direccionEntrega: {
-    torre: string;
-    piso: number;
-    aula: number;
-  };
   detalles: DetalleOrden[];
+  direccionEntrega?: any;
+  usuario?: { nombreCompleto: string; correo: string };
 }
 
 @Injectable({
@@ -47,8 +29,8 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  crearOrden(idDireccionEntrega: number): Observable<Orden> {
-    return this.http.post<Orden>(this.apiUrl, { idDireccionEntrega });
+  crearOrden(idDireccion: number): Observable<Orden> {
+    return this.http.post<Orden>(this.apiUrl, { idDireccionEntrega: idDireccion });
   }
 
   obtenerMisOrdenes(): Observable<Orden[]> {
@@ -57,5 +39,9 @@ export class OrderService {
 
   obtenerTodasLasOrdenes(): Observable<Orden[]> {
     return this.http.get<Orden[]>(`${this.apiUrl}/todas`);
+  }
+
+  cambiarEstadoOrden(id: number, estado: string): Observable<Orden> {
+    return this.http.put<Orden>(`${this.apiUrl}/${id}/estado`, { estado });
   }
 }

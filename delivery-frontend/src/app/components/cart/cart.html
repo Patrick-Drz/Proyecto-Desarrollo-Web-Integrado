@@ -54,9 +54,8 @@
                 <tr>
                   <th>Producto / Oferta</th>
                   <th>Precio Base</th>
-                  <th>Cantidad</th>
-                  <th>Subtotal</th>
-                </tr>
+                  <th class="text-center">Cantidad</th> <th>Subtotal</th>
+                  <th></th> </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of carrito.items">
@@ -79,8 +78,29 @@
                     </div>
                   </td>
                   <td>S/ {{ item.precioUnitarioAlMomento | number:'1.2-2' }}</td>
-                  <td>{{ item.cantidad }}</td>
+                  
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm border rounded" role="group">
+                        <button type="button" class="btn btn-light" (click)="decrementarCantidad(item)" [disabled]="loading">
+                            <i class="fa-solid fa-minus text-secondary"></i>
+                        </button>
+                        <span class="btn btn-light disabled fw-bold text-dark px-3" style="background: #fff; opacity: 1;">
+                            {{ item.cantidad }}
+                        </span>
+                        <button type="button" class="btn btn-light" (click)="incrementarCantidad(item)" [disabled]="loading">
+                            <i class="fa-solid fa-plus text-secondary"></i>
+                        </button>
+                    </div>
+                  </td>
+
                   <td class="fw-bold">S/ {{ (item.precioUnitarioAlMomento * item.cantidad) | number:'1.2-2' }}</td>
+                  
+                  <td class="text-end">
+                    <button class="btn btn-sm text-danger" (click)="eliminarItem(item)" [disabled]="loading" title="Eliminar">
+                        <i class="fa-regular fa-trash-can fa-lg"></i>
+                    </button>
+                  </td>
+
                 </tr>
               </tbody>
             </table>

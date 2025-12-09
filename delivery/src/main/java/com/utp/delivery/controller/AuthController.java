@@ -13,6 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -40,7 +44,6 @@ public class AuthController {
         Usuario usuario = usuarioRepository.findByCorreo(correo)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
-
         String rolString = (usuario.getRol() != null) ? usuario.getRol().toString() : "CLIENTE";
 
         UserProfileResponse response = UserProfileResponse.builder()
@@ -52,5 +55,29 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> request) {
+        String correo = request.get("correo").trim(); // Limpiamos espacios
+        String token = authService.generarTokenRecuperacion(correo);
+        
+        String link = "http://localhost:4200/auth/reset-password?token=" + token;
+        
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Solicitud procesada.");
+        response.put("link", link);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String nuevaContrasena = request.get("nuevaContrasena");
+        
+        authService.cambiarContrasenaConToken(token, nuevaContrasena);
+        
+        return ResponseEntity.ok(Collections.singletonMap("mensaje", "Contraseña actualizada correctamente."));
     }
 }

@@ -24,7 +24,6 @@ export class Dashboard implements OnInit {
   ultimosPedidos: Orden[] = [];
   productosBajoStock: any[] = [];
 
-
   public salesChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
@@ -86,7 +85,7 @@ export class Dashboard implements OnInit {
   };
 
   public complaintsChartData: ChartData<'bar'> = {
-    labels: [], 
+    labels: [],
     datasets: [{
       data: [],
       label: 'Cantidad',
@@ -111,7 +110,6 @@ export class Dashboard implements OnInit {
       legend: { display: false }
     }
   };
-
 
   public barChartData: ChartData<'bar'> = {
     labels: [],
@@ -172,7 +170,7 @@ export class Dashboard implements OnInit {
   procesarMetricasVentas(ordenes: Orden[]) {
     this.cantidadPedidos = ordenes.length;
     this.totalVentas = ordenes
-      .filter(o => o.estado !== 'CANCELADO')
+      .filter(o => o.estado === 'ENTREGADO')
       .reduce((sum, current) => sum + (current.total || 0), 0);
     this.ultimosPedidos = ordenes.sort((a, b) => b.id - a.id).slice(0, 5);
   }
@@ -181,7 +179,7 @@ export class Dashboard implements OnInit {
     const datosPorFecha: any = {};
     
     ordenes.forEach(orden => {
-      if (orden.estado !== 'CANCELADO') {
+      if (orden.estado === 'ENTREGADO') {
         const fecha = orden.fechaOrden.toString().substring(0, 10);
         if (!datosPorFecha[fecha]) datosPorFecha[fecha] = { total: 0, cantidad: 0 };
         datosPorFecha[fecha].total += orden.total;

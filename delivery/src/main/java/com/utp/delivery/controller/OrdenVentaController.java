@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -20,7 +21,7 @@ import java.util.List;
 public class OrdenVentaController {
     
     private final OrdenVentaService ordenVentaService;
-    private final UsuarioRepository usuarioRepository; 
+    private final UsuarioRepository usuarioRepository;
 
     private Usuario getUsuarioAutenticado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,7 +33,6 @@ public class OrdenVentaController {
     @PostMapping
     public ResponseEntity<OrdenVenta> crearOrden(@RequestBody CrearOrdenRequest ordenRequest) {
         Usuario usuario = getUsuarioAutenticado();
-
         OrdenVenta nuevaOrden = ordenVentaService.crearOrdenDesdeCarrito(usuario.getId(), ordenRequest);
         return new ResponseEntity<>(nuevaOrden, HttpStatus.CREATED);
     }
@@ -52,5 +52,12 @@ public class OrdenVentaController {
     @GetMapping("/todas")
     public ResponseEntity<List<OrdenVenta>> listarTodasLasOrdenes() {
         return ResponseEntity.ok(ordenVentaService.obtenerTodasLasOrdenes());
+    }
+
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<OrdenVenta> cambiarEstadoOrden(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String nuevoEstado = request.get("estado");
+        OrdenVenta ordenActualizada = ordenVentaService.cambiarEstado(id, nuevoEstado);
+        return ResponseEntity.ok(ordenActualizada);
     }
 }
