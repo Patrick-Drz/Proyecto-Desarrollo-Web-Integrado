@@ -1,44 +1,43 @@
-<div class="auth-wrapper">
+<div class="main-container">
   <div class="auth-card">
     
-    <div class="auth-form-side">
-      <h2 class="auth-title">Iniciar Sesión</h2>
-      
-      <div class="social-buttons">
-        <button class="btn-social"><i class="fa-brands fa-google"></i></button>
-        <button class="btn-social"><i class="fa-brands fa-facebook-f"></i></button>
-        <button class="btn-social"><i class="fa-brands fa-github"></i></button>
-        <button class="btn-social"><i class="fa-brands fa-linkedin-in"></i></button>
+    <div class="tabs-header">
+      <div class="tab-item active">INICIAR SESIÓN</div>
+      <div class="tab-item inactive" routerLink="/auth/register">REGISTRARSE</div>
+    </div>
+
+    <div class="auth-body">
+      <div class="header-section">
+        <h2 class="welcome-title">Bienvenido</h2>
+        <p class="welcome-subtitle">Ingresa a tu cuenta para continuar</p>
       </div>
-      
-      <p class="auth-subtitle">o usa tu correo y contraseña</p>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-100">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Correo" formControlName="correo">
-        </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Contraseña" formControlName="contrasena">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input type="email" placeholder="Correo Institucional" formControlName="correo">
+          <div class="input-border"></div>
         </div>
 
-        <div class="forgot-pass">
-          <a href="#">¿Olvidaste tu Contraseña?</a>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input type="password" placeholder="Contraseña" formControlName="contrasena">
+          <div class="input-border"></div>
         </div>
 
-        <div *ngIf="errorMessage" class="alert alert-danger py-2 small">{{ errorMessage }}</div>
+        <div class="forgot-pass-wrapper">
+          <a href="#" class="forgot-pass-link">¿Olvidaste tu contraseña?</a>
+        </div>
 
-        <button type="submit" class="btn btn-primary btn-auth" [disabled]="loginForm.invalid">ENTRAR</button>
+        <div *ngIf="errorMessage" class="error-banner">
+          <i class="fa-solid fa-triangle-exclamation"></i> {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="loginForm.invalid">
+          INGRESAR
+        </button>
       </form>
     </div>
-
-    <div class="auth-info-side bg-gradient-primary">
-      <div class="text-center text-white px-4">
-        <h2 class="fw-bold mb-3">¡Hola, Futuro Usuario!</h2>
-        <p class="mb-4">Regístrate para empezar a disfrutar de nuestros servicios de delivery en el campus.</p>
-        <button class="btn btn-outline-light btn-switch" routerLink="/auth/register">REGISTRARSE</button>
-      </div>
-    </div>
-
   </div>
 </div>
