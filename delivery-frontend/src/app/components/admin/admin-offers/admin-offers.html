@@ -2,7 +2,9 @@
     <h2 class="fw-bold text-dark mb-4">Gestión de Ofertas</h2>
 
     <div class="card shadow-sm mb-5 border-0">
-        <div class="card-header bg-primary text-white fw-bold">Añadir Nueva Oferta</div>
+        <div class="card-header text-white fw-bold" [ngClass]="editMode ? 'bg-warning text-dark' : 'bg-primary'">
+            {{ editMode ? 'Editar Oferta Existente' : 'Añadir Nueva Oferta' }}
+        </div>
         <div class="card-body p-4">
             <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
                 
@@ -37,13 +39,17 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">Fecha de Inicio:</label>
                         <input type="datetime-local" class="form-control bg-light border-0" formControlName="fechaInicio">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label text-muted small">Fecha de Fin:</label>
                         <input type="datetime-local" class="form-control bg-light border-0" formControlName="fechaFin">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Stock Disponible:</label>
+                        <input type="number" class="form-control bg-light border-0" formControlName="stock" placeholder="Ej: 100">
                     </div>
                 </div>
 
@@ -52,9 +58,19 @@
                     <label class="form-check-label" for="activeCheck">Oferta Activa</label>
                 </div>
 
-                <button type="submit" class="btn btn-success px-4 fw-bold" [disabled]="offerForm.invalid">
-                    <i class="fa-solid fa-plus me-2"></i>Añadir Oferta
-                </button>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn px-4 fw-bold" 
+                            [ngClass]="editMode ? 'btn-warning text-dark' : 'btn-success'"
+                            [disabled]="offerForm.invalid">
+                        <i class="fa-solid" [ngClass]="editMode ? 'fa-pen' : 'fa-plus'"></i>
+                        {{ editMode ? 'Actualizar Oferta' : 'Añadir Oferta' }}
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary" *ngIf="editMode" (click)="cancelEdit()">
+                        Cancelar
+                    </button>
+                </div>
+
             </form>
         </div>
     </div>
@@ -66,32 +82,45 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Tipo</th>
                             <th>P. Regular</th>
                             <th>Desc.</th>
-                            <th>Inicio</th>
-                            <th>Fin</th>
-                            <th>Activa</th>
+                            <th>Stock</th> <th>Vigencia</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let oferta of ofertas">
-                            <td class="ps-3">{{oferta.id}}</td>
                             <td class="fw-bold">{{oferta.nombreOferta}}</td>
                             <td><span class="badge bg-light text-dark border">{{oferta.tipoDescuento}}</span></td>
                             <td>S/ {{oferta.precioRegular | number:'1.2-2'}}</td>
                             <td class="text-success fw-bold">{{oferta.valorDescuento | number:'1.2-2'}}</td>
-                            <td>{{oferta.fechaInicio | date:'short'}}</td>
-                            <td>{{oferta.fechaFin | date:'short'}}</td>
+                            
                             <td>
-                                <span class="badge" [ngClass]="oferta.activa ? 'bg-success' : 'bg-secondary'">
-                                    {{oferta.activa ? 'Sí' : 'No'}}
+                                <span class="badge" [ngClass]="oferta.stock > 10 ? 'bg-info' : 'bg-danger'">
+                                    {{oferta.stock}} unid.
                                 </span>
                             </td>
-                            <td class="pe-3">
+
+                            <td class="small">
+                                <div class="text-muted" style="font-size: 0.75rem;">Hasta:</div>
+                                {{oferta.fechaFin | date:'short'}}
+                            </td>
+                            
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" 
+                                           [checked]="oferta.activa" 
+                                           (change)="toggleEstado(oferta)">
+                                </div>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-warning btn-sm fw-bold me-2" (click)="cargarOferta(oferta)">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
                                 <button class="btn btn-danger btn-sm fw-bold" (click)="eliminar(oferta.id)">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>

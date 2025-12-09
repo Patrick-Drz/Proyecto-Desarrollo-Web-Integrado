@@ -12,6 +12,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card border-0 shadow-sm mb-4 order-card" *ngFor="let orden of ordenes">
+                
                 <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
                         <span class="fw-bold text-primary me-3">Orden #{{ orden.id }}</span>
@@ -20,45 +21,67 @@
                         </span>
                     </div>
                     
-                    <div class="d-flex align-items-center gap-3">
-                        <h5 class="mb-0 fw-bold text-dark">Total: S/ {{ orden.total | number:'1.2-2' }}</h5>
-                    </div>
+                    <span class="badge rounded-pill px-3" [ngClass]="{
+                        'bg-warning text-dark': orden.estado === 'PENDIENTE',
+                        'bg-success': orden.estado === 'ENTREGADO',
+                        'bg-danger': orden.estado === 'CANCELADO'
+                    }">{{ orden.estado }}</span>
                 </div>
 
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
-                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Productos / Ofertas</h6>
+                        <div class="col-md-8 border-end-md">
+                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Productos</h6>
+                            
                             <div class="d-flex flex-column gap-3">
                                 <div class="d-flex align-items-center" *ngFor="let detalle of orden.detalles">
-                                    
                                     <img [src]="detalle.producto?.rutaImagen || 'https://cdn-icons-png.flaticon.com/512/879/879757.png'"
                                          class="rounded me-3 border" width="50" height="50" style="object-fit: cover;"
                                          onerror="this.src='assets/placeholder.jpg'">
                                     
                                     <div class="flex-grow-1">
                                         <div class="fw-bold small">
-                                            {{ detalle.producto?.nombre || detalle.oferta?.nombreOferta || 'Ítem Desconocido' }}
+                                            {{ detalle.producto?.nombre || detalle.oferta?.nombreOferta || 'Ítem' }}
                                         </div>
-                                        
                                         <small *ngIf="detalle.oferta" class="text-success fst-italic" style="font-size: 0.75rem;">
-                                            <i class="fa-solid fa-tag me-1"></i>Oferta Especial
+                                            <i class="fa-solid fa-tag me-1"></i>Oferta
                                         </small>
-
                                         <div class="text-muted x-small">
-                                            Cant: {{ detalle.cantidad }} x S/ {{ detalle.precioUnitarioAlMomento | number:'1.2-2' }}
+                                            {{ detalle.cantidad }} unid. x S/ {{ detalle.precioUnitarioAlMomento | number:'1.2-2' }}
                                         </div>
                                     </div>
+
                                     <div class="fw-bold text-end small">
                                         S/ {{ (detalle.cantidad * detalle.precioUnitarioAlMomento) | number:'1.2-2' }}
                                     </div>
                                 </div>
                             </div>
+
+                            <hr class="my-4">
+
+                            <div class="d-flex flex-column align-items-end">
+                                <div class="text-end">
+                                    
+                                    <div *ngIf="orden.igv">
+                                        <p class="mb-1 text-muted small">Subtotal (Base): S/ {{ (orden.total - orden.igv) | number:'1.2-2' }}</p>
+                                        <p class="mb-1 text-muted small">IGV (18%): S/ {{ orden.igv | number:'1.2-2' }}</p>
+                                        <hr class="my-2">
+                                        <h4 class="mb-0">Total Pagado: <span class="text-primary fw-bold">S/ {{ orden.total | number:'1.2-2' }}</span></h4>
+                                    </div>
+                                    
+                                    <div *ngIf="!orden.igv">
+                                        <p class="mb-1 text-muted small">Total Pagado: S/ {{ orden.total | number:'1.2-2' }}</p>
+                                        <small class="text-muted fst-italic">(Orden antigua sin desglose de IGV)</small>
+                                    </div>
+
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="col-md-4 mt-4 mt-md-0 ps-md-4 border-start-md">
-                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Entrega</h6>
-                            <div class="bg-light p-3 rounded-3">
+                        <div class="col-md-4 mt-4 mt-md-0 ps-md-4">
+                            <h6 class="text-muted mb-3 small text-uppercase fw-bold">Punto de Entrega</h6>
+                            <div class="bg-light p-3 rounded-3 small">
                                 <div class="mb-2">
                                     <i class="fa-solid fa-building text-primary me-2"></i>
                                     <strong>Torre:</strong> {{ orden.direccionEntrega?.torre }}
@@ -73,6 +96,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

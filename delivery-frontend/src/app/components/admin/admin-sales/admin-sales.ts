@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../../../core/services/order';
+import { OrderService, Orden } from '../../../core/services/order';
 
 @Component({
   selector: 'app-admin-sales',
@@ -8,25 +8,30 @@ import { OrderService } from '../../../core/services/order';
   standalone: false
 })
 export class AdminSales implements OnInit {
-  ventas: any[] = [];
-  ventaSeleccionada: any = null;
+  
+  ordenes: Orden[] = [];
+  ordenSeleccionada: Orden | null = null; 
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
+    this.cargarOrdenes();
+  }
+
+  cargarOrdenes() {
     this.orderService.obtenerTodasLasOrdenes().subscribe({
       next: (data) => {
-        this.ventas = data.reverse();
+        this.ordenes = data.sort((a, b) => b.id - a.id);
       },
       error: (err) => console.error('Error al cargar ventas:', err)
     });
   }
 
-  verDetalles(venta: any) {
-    this.ventaSeleccionada = venta;
+  verDetalles(orden: Orden) {
+    this.ordenSeleccionada = orden;
   }
 
   cerrarModal() {
-    this.ventaSeleccionada = null;
+    this.ordenSeleccionada = null;
   }
 }

@@ -1,104 +1,148 @@
 <div class="container py-5">
-    <div class="row">
-        
-        <div class="col-lg-4 mb-4">
-            <div class="card border-0 shadow-sm text-center p-4 h-100 profile-card">
-                <div class="mb-3 position-relative">
-                    <div class="avatar-circle mx-auto bg-primary text-white d-flex align-items-center justify-content-center fs-1 fw-bold">
-                        {{ usuario.nombre?.charAt(0) || 'U' }}
-                    </div>
-                    <span class="position-absolute bottom-0 start-50 translate-middle-x badge rounded-pill bg-success border border-white">
-                        <i class="fa-solid fa-check me-1"></i> Activo
-                    </span>
-                </div>
-                
-                <h4 class="fw-bold mb-1 text-dark">{{ usuario.nombre }}</h4>
-                <p class="text-muted small mb-3">{{ usuario.email }}</p>
-                
-                <div class="d-flex justify-content-center gap-2 mb-4">
-                    <span class="badge bg-light text-dark border px-3 py-2">
-                        <i class="fa-solid fa-id-card me-2 text-primary"></i> {{ usuario.codigo }}
-                    </span>
-                </div>
-
-                <hr class="my-4 opacity-10">
-
-                <div class="d-grid gap-2">
-                    <button class="btn btn-outline-danger fw-bold" (click)="logout()">
-                        <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión
-                    </button>
-                </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      
+      <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="bg-primary p-4 text-white position-relative">
+          <div class="d-flex align-items-center flex-column flex-md-row text-center text-md-start">
+            <div class="avatar-circle bg-white text-primary fw-bold display-4 shadow mb-3 mb-md-0 me-md-4 d-flex align-items-center justify-content-center" 
+                 style="width: 100px; height: 100px; border-radius: 50%;">
+              {{ usuario?.nombreCompleto?.charAt(0) || 'U' }}
             </div>
+            <div class="flex-grow-1">
+              <h3 class="fw-bold mb-1">{{ usuario?.nombreCompleto }}</h3>
+              <p class="mb-1 opacity-75">{{ usuario?.correo }}</p>
+              <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                <span class="badge bg-white text-primary rounded-pill px-3">Estudiante</span>
+                <span class="badge border border-white text-white rounded-pill px-3">Activo</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="col-lg-8">
-            
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-map-location-dot text-primary me-2"></i>Mis Ubicaciones</h5>
-                    <a routerLink="/location" class="btn btn-sm btn-primary fw-bold"><i class="fa-solid fa-plus me-1"></i>Nueva</a>
-                </div>
-                <div class="card-body">
-                    <div *ngIf="direcciones.length === 0" class="alert alert-light text-center mb-0">
-                        <i class="fa-solid fa-map-pin text-muted me-2"></i> No tienes ubicaciones guardadas aún.
-                    </div>
-                    <div class="row g-3" *ngIf="direcciones.length > 0">
-                        <div class="col-md-6" *ngFor="let dir of direcciones">
-                            <div class="p-3 border rounded bg-light d-flex align-items-center h-100 location-item">
-                                <div class="icon-box bg-white rounded-circle p-3 me-3 shadow-sm text-primary">
-                                    <i class="fa-solid fa-building fa-lg"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-bold text-dark">Torre {{ dir.torre }}</div>
-                                    <div class="small text-muted">Piso {{ dir.piso }} - Aula {{ dir.aula }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="card border-0 shadow-lg mb-4 membership-card">
+        <div class="card-body p-4 d-flex flex-column justify-content-between position-relative z-1">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="opacity-75 text-uppercase letter-spacing-2 mb-1">Nivel de Fidelidad</h6>
+              <h2 class="fw-bold mb-0 text-white"><i class="fa-solid fa-medal me-2"></i>{{ nombreNivel }}</h2>
             </div>
+            <div class="text-end">
+              <i class="fa-brands fa-cc-visa fa-3x opacity-50 text-white"></i>
+            </div>
+          </div>
+          <div class="mt-4">
+            <div class="d-flex justify-content-between text-small mb-2 text-white">
+              <span>XP Actual: <strong>{{ puntosXP }}</strong></span>
+              <span>Siguiente: <strong>{{ siguienteNivel }}</strong></span>
+            </div>
+            <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.2);">
+              <div class="progress-bar bg-warning" role="progressbar" [style.width]="porcentajeProgreso + '%'"></div>
+            </div>
+            <small class="mt-2 d-block opacity-75 text-white">
+              Te faltan {{ xpParaSiguiente - puntosXP }} XP para subir de nivel.
+            </small>
+          </div>
+        </div>
+      </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-clock-rotate-left text-primary me-2"></i>Últimos Pedidos</h5>
-                    <a routerLink="/orders" class="text-decoration-none small fw-bold">Ver historial completo</a>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0 align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="ps-4"># Orden</th>
-                                    <th>Fecha</th>
-                                    <th>Total</th>
-                                    <th class="text-end pe-4">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let orden of ultimasOrdenes">
-                                    <td class="ps-4 fw-bold text-primary">#{{ orden.id }}</td>
-                                    <td>{{ orden.fechaOrden | date:'dd MMM yyyy' }}</td>
-                                    <td class="fw-bold">S/ {{ orden.total | number:'1.2-2' }}</td>
-                                    <td class="text-end pe-4">
-                                        <span class="badge rounded-pill" [ngClass]="{
-                                            'bg-warning text-dark': orden.estado === 'PENDIENTE',
-                                            'bg-success': orden.estado === 'ENTREGADO',
-                                            'bg-danger': orden.estado === 'CANCELADO'
-                                        }">{{ orden.estado }}</span>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="ultimasOrdenes.length === 0">
-                                    <td colspan="4" class="text-center py-5 text-muted">
-                                        <i class="fa-solid fa-receipt fa-2x mb-2 d-block"></i>
-                                        Aún no has realizado ningún pedido.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm stat-card h-100">
+            <div class="card-body p-3 d-flex align-items-center">
+              <div class="bg-light-primary text-primary rounded-circle p-3 me-3">
+                <i class="fa-solid fa-receipt fa-xl"></i>
+              </div>
+              <div>
+                <h3 class="fw-bold mb-0">{{ totalPedidos }}</h3>
+                <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Pedidos Totales</small>
+              </div>
             </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm stat-card h-100">
+            <div class="card-body p-3 d-flex align-items-center">
+              <div class="bg-light-success text-success rounded-circle p-3 me-3">
+                <i class="fa-solid fa-utensils fa-xl"></i>
+              </div>
+              <div>
+                <h3 class="fw-bold mb-0">{{ totalProductosComprados }}</h3>
+                <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Platos Probados</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-4 bg-white" *ngIf="productoFavorito">
+        <div class="card-body p-4">
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h5 class="fw-bold text-dark mb-1">
+                <i class="fa-solid fa-heart text-danger me-2"></i>Tu Obsesión Culinaria
+              </h5>
+              <p class="text-muted mb-0 small">
+                No puedes vivir sin <strong>{{ productoFavorito.nombre }}</strong>. 
+                Lo has pedido <span class="badge bg-primary rounded-pill">{{ productoFavorito.count }} veces</span>.
+              </p>
+            </div>
+            <div class="col-md-4 text-center mt-3 mt-md-0">
+               <img [src]="productoFavorito.img || 'https://cdn-icons-png.flaticon.com/512/879/879757.png'" 
+                   class="rounded-circle border border-4 border-light shadow"
+                   style="width: 80px; height: 80px; object-fit: cover;"
+                   onerror="this.src='assets/placeholder.jpg'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-5">
+        <div class="card-header bg-white py-3 border-bottom">
+          <h6 class="mb-0 fw-bold text-dark"><i class="fa-regular fa-id-card me-2 text-primary"></i>Datos de la Cuenta</h6>
+        </div>
+        <div class="card-body p-0">
+          
+          <div class="d-flex align-items-center p-3 border-bottom">
+            <div class="bg-light rounded-circle p-3 me-3 text-center" style="width: 50px; height: 50px;">
+               <i class="fa-regular fa-user text-primary"></i>
+            </div>
+            <div>
+              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Nombre Completo</small>
+              <span class="fw-bold text-dark">{{ usuario?.nombreCompleto }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center p-3 border-bottom">
+            <div class="bg-light rounded-circle p-3 me-3 text-center" style="width: 50px; height: 50px;">
+               <i class="fa-regular fa-envelope text-danger"></i>
+            </div>
+            <div>
+              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Correo Institucional</small>
+              <span class="fw-bold text-dark">{{ usuario?.correo }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-center p-3">
+            <div class="bg-light rounded-circle p-3 me-3 text-center" style="width: 50px; height: 50px;">
+               <i class="fa-solid fa-hashtag text-info"></i>
+            </div>
+            <div>
+              <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 1px;">Código de Estudiante</small>
+              <span class="fw-bold text-dark">{{ usuario?.codigoEstudiante || 'No registrado' }}</span>
+            </div>
+          </div>
 
         </div>
+      </div>
+
+      <div class="text-center mb-5">
+        <button class="btn btn-outline-danger px-5 rounded-pill" (click)="logout()">
+          <i class="fa-solid fa-power-off me-2"></i>Cerrar Sesión
+        </button>
+      </div>
+
     </div>
+  </div>
 </div>

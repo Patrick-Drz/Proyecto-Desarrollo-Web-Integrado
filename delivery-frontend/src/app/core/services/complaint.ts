@@ -3,10 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Reclamacion {
-  id?: number;
-  tipoReclamacion: string;
+  id: number;
+  tipoReclamacion: string; 
   descripcion: string;
-  fechaCreacion?: string;
+  fechaCreacion: string;
+  estado: string;
   usuario?: {
     nombreCompleto: string;
     correo: string;
@@ -21,11 +22,11 @@ export class ComplaintService {
 
   constructor(private http: HttpClient) { }
 
-  crearReclamacion(reclamacion: { tipoReclamacion: string, descripcion: string }): Observable<Reclamacion> {
-    return this.http.post<Reclamacion>(this.apiUrl, reclamacion);
+  obtenerReclamaciones(): Observable<Reclamacion[]> {
+    return this.http.get<Reclamacion[]>(this.apiUrl);
   }
 
-  obtenerTodas(): Observable<Reclamacion[]> {
-    return this.http.get<Reclamacion[]>(this.apiUrl);
+  crearReclamacion(reclamacion: any): Observable<Reclamacion> {
+    return this.http.post<Reclamacion>(this.apiUrl, reclamacion);
   }
 }

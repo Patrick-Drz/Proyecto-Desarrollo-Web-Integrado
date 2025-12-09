@@ -4,6 +4,14 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 
+export interface UserProfile {
+  id: number;
+  nombreCompleto: string;
+  correo: string;
+  codigoEstudiante: string;
+  rol: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,8 +44,12 @@ export class AuthService {
     );
   }
 
+  getUserProfile(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(`${this.apiUrl}/profile`);
+  }
+
   getProfile(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/me`);
+    return this.http.get(`${this.apiUrl}/profile`);
   }
 
   logout(): void {

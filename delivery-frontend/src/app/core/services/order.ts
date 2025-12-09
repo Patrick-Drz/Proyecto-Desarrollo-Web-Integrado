@@ -8,11 +8,13 @@ export interface DetalleOrden {
     id: number;
     nombre: string;
     rutaImagen: string;
+    precio: number;
   };
   oferta?: {
     id: number;
     nombreOferta: string;
     descripcionOferta: string;
+    precioOferta: number;
   };
   cantidad: number;
   precioUnitarioAlMomento: number;
@@ -20,8 +22,9 @@ export interface DetalleOrden {
 
 export interface Orden {
   id: number;
-  fechaOrden: string;
+  fechaOrden: string; 
   total: number;
+  igv: number;
   estado: string;
   usuario?: {
     nombreCompleto: string;

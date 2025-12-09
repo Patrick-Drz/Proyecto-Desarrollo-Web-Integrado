@@ -33,6 +33,12 @@
           <label class="form-label">Imagen URL:</label>
           <input type="text" class="form-control" formControlName="rutaImagen">
         </div>
+        
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" formControlName="activo" id="checkActivo">
+            <label class="form-check-label" for="checkActivo">Producto Activo</label>
+        </div>
+
         <button type="submit" class="btn btn-success" [disabled]="productForm.invalid">
           {{ editMode ? 'Actualizar Producto' : 'Añadir Producto' }}
         </button>
@@ -48,27 +54,40 @@
         <thead>
           <tr>
             <th>Imagen</th>
-            <th>ID</th>
             <th>Código</th>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
+            <th>Estado</th> <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let producto of productos">
             <td><img [src]="producto.rutaImagen" width="50" height="50" class="rounded" style="object-fit: cover;"></td>
-            <td>{{producto.id}}</td>
             <td>{{producto.codigoProducto}}</td>
             <td>{{producto.nombre}}</td>
             <td>S/ {{producto.precio | number:'1.2-2'}}</td>
             <td>{{producto.stock}}</td>
-            <td><small>{{producto.descripcion}}</small></td>
+            
             <td>
-              <button class="btn btn-warning btn-sm me-2" (click)="cargarProducto(producto)">Modificar</button>
-              <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">Eliminar</button>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" 
+                           [checked]="producto.activo" 
+                           (change)="toggleEstado(producto)">
+                    <label class="form-check-label small" 
+                           [ngClass]="{'text-success': producto.activo, 'text-muted': !producto.activo}">
+                        {{ producto.activo ? 'Visible' : 'Oculto' }}
+                    </label>
+                </div>
+            </td>
+
+            <td>
+              <button class="btn btn-warning btn-sm me-2" (click)="cargarProducto(producto)">
+                  <i class="fa-solid fa-pen"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">
+                  <i class="fa-solid fa-trash"></i>
+              </button>
             </td>
           </tr>
         </tbody>

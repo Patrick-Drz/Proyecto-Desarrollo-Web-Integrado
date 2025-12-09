@@ -24,6 +24,7 @@ import { AdminComplaints } from './components/admin/admin-complaints/admin-compl
 import { AboutComponent } from './components/about/about';
 import { ProfileComponent } from './components/profile/profile';
 import { AdminCombos } from './components/admin/admin-combos/admin-combos';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { AdminCombos } from './components/admin/admin-combos/admin-combos';
     NgbModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BaseChartDirective 
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -61,7 +63,8 @@ import { AdminCombos } from './components/admin/admin-combos/admin-combos';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [App]
 })

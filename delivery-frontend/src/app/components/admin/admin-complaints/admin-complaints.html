@@ -1,42 +1,105 @@
 <div class="container-fluid p-4">
-  <h2 class="mb-4">Gestión de Reclamaciones</h2>
-  
-  <div class="card shadow-sm">
-    <div class="card-body p-0">
-      <div class="table-responsive">
-        <table class="table table-striped table-hover mb-0">
-          <thead class="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Usuario</th>
-              <th>Correo</th>
-              <th>Tipo</th>
-              <th>Descripción</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let rec of reclamaciones">
-              <td>{{rec.id}}</td>
-              <td class="fw-bold">{{rec.usuario?.nombreCompleto || 'Anónimo'}}</td>
-              <td>{{rec.usuario?.correo}}</td>
-              <td>
-                <span class="badge" [ngClass]="{
-                    'bg-danger': rec.tipoReclamacion === 'QUEJA',
-                    'bg-warning text-dark': rec.tipoReclamacion === 'RECLAMO',
-                    'bg-info text-dark': rec.tipoReclamacion === 'SUGERENCIA'
-                }">{{rec.tipoReclamacion}}</span>
-              </td>
-              <td>{{rec.descripcion}}</td>
-              <td>{{rec.fechaCreacion | date:'short'}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-      <div *ngIf="reclamaciones.length === 0" class="text-center py-4 text-muted">
-        No hay reclamaciones registradas.
-      </div>
+    <h2 class="mb-4 text-dark fw-bold">Gestión de Reclamaciones</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h6 class="m-0 fw-bold text-primary">Buzón de Atención</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Usuario</th>
+                            <th>Tipo</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let rec of reclamaciones">
+                            <td class="fw-bold ps-4 text-secondary">#{{ rec.id }}</td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold text-dark small">{{ rec.usuario?.nombreCompleto || 'Anónimo' }}</span>
+                                    <small class="text-muted" style="font-size: 0.75rem;">{{ rec.usuario?.correo }}</small>
+                                </div>
+                            </td>
+                            
+                            <td>
+                                <span class="badge fw-normal text-uppercase border" 
+                                      [ngClass]="{
+                                        'bg-info text-dark border-info': rec.tipoReclamacion === 'SUGERENCIA',
+                                        'bg-warning text-dark border-warning': rec.tipoReclamacion === 'QUEJA',
+                                        'bg-danger text-white border-danger': rec.tipoReclamacion === 'RECLAMO',
+                                        'bg-light text-dark': rec.tipoReclamacion !== 'SUGERENCIA' && rec.tipoReclamacion !== 'QUEJA' && rec.tipoReclamacion !== 'RECLAMO'
+                                      }">
+                                    {{ rec.tipoReclamacion }}
+                                </span>
+                            </td>
+                            
+                            <td class="small text-muted">{{ rec.fechaCreacion | date:'mediumDate' }}</td>
+                            
+                            <td>
+                                <span class="badge rounded-pill bg-dark text-white px-3 py-2">
+                                    {{ rec.estado }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn btn-outline-primary btn-sm rounded-circle" (click)="verDetalle(rec)" title="Ver Detalles">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="reclamaciones.length === 0">
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fa-solid fa-inbox fa-3x mb-3 text-light"></i>
+                                <p class="mb-0">No hay reclamaciones registradas.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+<div class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5);" *ngIf="reclamacionSeleccionada">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Reclamo #{{ reclamacionSeleccionada.id }}</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cerrarModal()"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge text-uppercase" [ngClass]="{
+                        'bg-info text-dark': reclamacionSeleccionada.tipoReclamacion === 'SUGERENCIA',
+                        'bg-warning text-dark': reclamacionSeleccionada.tipoReclamacion === 'QUEJA',
+                        'bg-danger text-white': reclamacionSeleccionada.tipoReclamacion === 'RECLAMO',
+                        'bg-secondary text-white': reclamacionSeleccionada.tipoReclamacion !== 'SUGERENCIA' && reclamacionSeleccionada.tipoReclamacion !== 'QUEJA' && reclamacionSeleccionada.tipoReclamacion !== 'RECLAMO'
+                    }">
+                        {{ reclamacionSeleccionada.tipoReclamacion }}
+                    </span>
+                    <span class="text-muted small">{{ reclamacionSeleccionada.fechaCreacion | date:'medium' }}</span>
+                </div>
+                
+                <h6 class="fw-bold text-dark">Descripción del caso:</h6>
+                <div class="p-3 bg-light rounded mb-3 border">
+                    <p class="mb-0 text-secondary">{{ reclamacionSeleccionada.descripcion }}</p>
+                </div>
+
+                <div class="d-flex align-items-center text-muted small mt-4 pt-3 border-top">
+                    <i class="fa-solid fa-user me-2"></i> 
+                    Enviado por: <strong>{{ reclamacionSeleccionada.usuario?.nombreCompleto }}</strong>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>

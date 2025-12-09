@@ -12,6 +12,7 @@ export interface Oferta {
   fechaInicio: string;
   fechaFin: string;
   activa: boolean;
+  stock: number; 
 }
 
 @Injectable({
@@ -26,12 +27,20 @@ export class OfferService {
     return this.http.get<Oferta[]>(this.apiUrl);
   }
 
+  obtenerOfertasActivas(): Observable<Oferta[]> {
+    return this.http.get<Oferta[]>(`${this.apiUrl}/activas`);
+  }
+
   crearOferta(oferta: Oferta): Observable<Oferta> {
     return this.http.post<Oferta>(this.apiUrl, oferta);
   }
 
   actualizarOferta(id: number, oferta: Oferta): Observable<Oferta> {
     return this.http.put<Oferta>(`${this.apiUrl}/${id}`, oferta);
+  }
+
+  cambiarEstado(id: number): Observable<Oferta> {
+    return this.http.put<Oferta>(`${this.apiUrl}/${id}/estado`, {});
   }
 
   eliminarOferta(id: number): Observable<void> {

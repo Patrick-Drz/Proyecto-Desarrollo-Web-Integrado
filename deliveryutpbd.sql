@@ -39,7 +39,7 @@ CREATE TABLE `carritos` (
 
 LOCK TABLES `carritos` WRITE;
 /*!40000 ALTER TABLE `carritos` DISABLE KEYS */;
-INSERT INTO `carritos` VALUES (6,1,'2025-10-16 00:11:46','2025-11-19 23:20:49'),(7,2,'2025-11-19 06:29:43','2025-11-19 23:52:16'),(8,3,'2025-11-19 06:31:02','2025-11-19 06:31:02');
+INSERT INTO `carritos` VALUES (6,1,'2025-10-16 00:11:46','2025-12-08 23:25:17'),(7,2,'2025-11-19 06:29:43','2025-11-19 23:52:16'),(8,3,'2025-11-19 06:31:02','2025-11-19 06:31:02');
 /*!40000 ALTER TABLE `carritos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +60,7 @@ CREATE TABLE `combo_productos` (
   KEY `id_producto_hijo` (`id_producto_hijo`),
   CONSTRAINT `combo_productos_ibfk_1` FOREIGN KEY (`id_producto_padre`) REFERENCES `productos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `combo_productos_ibfk_2` FOREIGN KEY (`id_producto_hijo`) REFERENCES `productos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `combo_productos` (
 
 LOCK TABLES `combo_productos` WRITE;
 /*!40000 ALTER TABLE `combo_productos` DISABLE KEYS */;
-INSERT INTO `combo_productos` VALUES (1,4,1,1),(2,4,2,1),(4,6,1,1),(5,6,2,1);
+INSERT INTO `combo_productos` VALUES (4,6,1,1),(5,6,2,1),(6,6,1,1);
 /*!40000 ALTER TABLE `combo_productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +94,7 @@ CREATE TABLE `detalles_orden_venta` (
   CONSTRAINT `FK_detalles_orden_oferta` FOREIGN KEY (`id_oferta`) REFERENCES `ofertas` (`id`),
   CONSTRAINT `detalles_orden_venta_ibfk_1` FOREIGN KEY (`id_orden_venta`) REFERENCES `ordenes_venta` (`id`) ON DELETE CASCADE,
   CONSTRAINT `detalles_orden_venta_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +103,7 @@ CREATE TABLE `detalles_orden_venta` (
 
 LOCK TABLES `detalles_orden_venta` WRITE;
 /*!40000 ALTER TABLE `detalles_orden_venta` DISABLE KEYS */;
-INSERT INTO `detalles_orden_venta` VALUES (1,1,1,1,18.50,NULL),(2,1,2,1,3.50,NULL),(3,2,1,3,18.50,NULL),(4,2,4,1,20.00,NULL),(5,2,2,4,3.50,NULL),(6,3,1,1,18.50,NULL),(9,5,2,3,3.50,NULL),(10,5,1,2,18.50,NULL),(11,5,NULL,2,13.00,1),(12,6,NULL,1,13.00,1),(13,6,6,1,13.00,NULL),(14,7,1,1,18.50,NULL),(15,7,2,1,3.50,NULL),(16,7,6,1,13.00,NULL);
+INSERT INTO `detalles_orden_venta` VALUES (1,1,6,1,13.00,NULL),(2,1,NULL,1,13.00,1),(3,1,1,1,11.00,NULL),(4,2,1,1,11.00,NULL),(5,3,6,4,13.00,NULL),(6,4,NULL,1,13.00,1),(7,4,7,1,20.00,NULL),(8,5,1,1,11.00,NULL),(9,5,7,1,20.00,NULL);
 /*!40000 ALTER TABLE `detalles_orden_venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +123,7 @@ CREATE TABLE `direcciones` (
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `direcciones_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `direcciones` (
 
 LOCK TABLES `direcciones` WRITE;
 /*!40000 ALTER TABLE `direcciones` DISABLE KEYS */;
-INSERT INTO `direcciones` VALUES (1,'C',4,2,NULL),(2,'B',5,1,NULL),(3,'B',4,6,NULL),(4,'A',3,7,NULL);
+INSERT INTO `direcciones` VALUES (1,'C',4,2,NULL),(2,'B',5,1,NULL),(3,'B',4,6,NULL),(4,'A',3,7,NULL),(5,'B',4,6,NULL),(6,'B',5,6,NULL);
 /*!40000 ALTER TABLE `direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +157,7 @@ CREATE TABLE `items_carrito` (
   CONSTRAINT `FKsppg9c27mr5wj4u423asfo40n` FOREIGN KEY (`id_oferta`) REFERENCES `ofertas` (`id`),
   CONSTRAINT `items_carrito_ibfk_1` FOREIGN KEY (`id_carrito`) REFERENCES `carritos` (`id`) ON DELETE CASCADE,
   CONSTRAINT `items_carrito_ibfk_2` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,8 +186,9 @@ CREATE TABLE `ofertas` (
   `fecha_fin` datetime NOT NULL,
   `activa` tinyint(1) DEFAULT 1,
   `precio_regular` decimal(38,2) DEFAULT NULL,
+  `stock` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +197,7 @@ CREATE TABLE `ofertas` (
 
 LOCK TABLES `ofertas` WRITE;
 /*!40000 ALTER TABLE `ofertas` DISABLE KEYS */;
-INSERT INTO `ofertas` VALUES (1,'Oferta Especial','Hamburguesa mas papa fritas y gaseos','MONTO_FIJO',7.00,'2025-11-19 18:37:00','2025-11-23 18:37:00',1,20.00);
+INSERT INTO `ofertas` VALUES (1,'Oferta Especial','Hamburguesa mas papa fritas y gaseos','MONTO_FIJO',7.00,'2025-12-08 18:37:00','2025-12-10 21:52:00',1,20.00,24);
 /*!40000 ALTER TABLE `ofertas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,12 +215,13 @@ CREATE TABLE `ordenes_venta` (
   `fecha_orden` datetime DEFAULT current_timestamp(),
   `total` decimal(38,2) DEFAULT NULL,
   `estado` varchar(50) DEFAULT 'PENDIENTE',
+  `igv` decimal(38,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   KEY `id_direccion_entrega` (`id_direccion_entrega`),
   CONSTRAINT `ordenes_venta_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
   CONSTRAINT `ordenes_venta_ibfk_2` FOREIGN KEY (`id_direccion_entrega`) REFERENCES `direcciones` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +230,7 @@ CREATE TABLE `ordenes_venta` (
 
 LOCK TABLES `ordenes_venta` WRITE;
 /*!40000 ALTER TABLE `ordenes_venta` DISABLE KEYS */;
-INSERT INTO `ordenes_venta` VALUES (1,1,1,'2025-10-16 00:20:35',22.00,'PENDIENTE'),(2,1,3,'2025-11-19 06:07:12',89.50,'PENDIENTE'),(3,2,4,'2025-11-19 06:30:12',18.50,'PENDIENTE'),(5,1,3,'2025-11-19 22:41:20',73.50,'PENDIENTE'),(6,1,3,'2025-11-19 23:20:55',26.00,'PENDIENTE'),(7,2,4,'2025-11-19 23:52:29',35.00,'PENDIENTE');
+INSERT INTO `ordenes_venta` VALUES (1,1,6,'2025-12-08 19:25:04',43.66,'PENDIENTE',6.66),(2,1,6,'2025-12-08 20:05:26',12.98,'PENDIENTE',1.98),(3,1,6,'2025-12-08 20:07:28',61.36,'PENDIENTE',9.36),(4,1,6,'2025-12-08 22:11:00',38.94,'PENDIENTE',5.94),(5,1,6,'2025-12-08 23:25:23',36.58,'PENDIENTE',5.58);
 /*!40000 ALTER TABLE `ordenes_venta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +252,7 @@ CREATE TABLE `productos` (
   `activo` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `codigo_producto` (`codigo_producto`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +261,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'HAM-CLA-01','Hamburguesa Clásica','Carne de res de 150g, queso cheddar, lechuga, tomate y salsa de la casa en pan brioche.',18.50,50,'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',1),(2,'BEB-INK-01','Inca Kola 500ml','Botella de gaseosa personal Inca Kola de 500ml, helada.',3.50,100,'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',1),(4,'COM-CLA-01','Combo Clásico','La combinación perfecta: Hamburguesa Clásica con tu Inca Kola personal.',20.00,40,'/assets/images/combo_clasico.jpg',0),(6,'COM-ALM-01','Combo Almuerzo','Ahorra comprando junto! Incluye Hamburguesa Royal y Gaseosa',13.00,20,'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5',1);
+INSERT INTO `productos` VALUES (1,'HAM-CLA-01','Hamburguesa Clásica','Carne de res de 150g, queso cheddar, lechuga, tomate y salsa de la casa en pan brioche.',11.00,49,'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',1),(2,'BEB-INK-01','Coca Cola 500ml','Botella de gaseosa personal Coca Cola de 500ml, helada.',3.50,100,'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',1),(6,'COM-ALM-01','Combo Almuerzo','Ahorra comprando junto! Incluye Hamburguesa Royal y Gaseosa',13.00,20,'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5',1),(7,'PZZ-CLA-01','Pizza Clasica','Pizza clasica con extra queso',20.00,0,'https://www.papajohns.com.pe/media/catalog/product/p/i/pizza-pepperoni.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=400&width=400&canvas=400:400&format=jpeg',0);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,7 +347,7 @@ CREATE TABLE `usuario_direcciones` (
 
 LOCK TABLES `usuario_direcciones` WRITE;
 /*!40000 ALTER TABLE `usuario_direcciones` DISABLE KEYS */;
-INSERT INTO `usuario_direcciones` VALUES (1,1),(1,2),(1,3),(2,4);
+INSERT INTO `usuario_direcciones` VALUES (2,4),(1,1),(1,2),(1,3),(1,5),(1,6);
 /*!40000 ALTER TABLE `usuario_direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -390,4 +392,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-11-19 18:54:57
+-- Dump completed on 2025-12-08 19:28:32

@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,31 +25,38 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
-        var user = new Usuario();
+        Usuario user = new Usuario();
         user.setNombreCompleto(request.getNombreCompleto());
         user.setCorreo(request.getCorreo());
-        user.setContrasena(passwordEncoder.encode(request.getContrasena()));
+        user.setContrasena(passwordEncoder.encode(request.getContrasena())); 
         user.setCodigoEstudiante(request.getCodigoEstudiante());
-        user.setRol("CLIENTE");
+        user.setRol("CLIENTE"); 
         user.setActivo(true);
         user.setFechaRegistro(LocalDateTime.now());
+        
         usuarioRepository.save(user);
         
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", user.getRol());
+        extraClaims.put("nombre", user.getNombreCompleto());
         
-        var jwtToken = jwtUtil.generateToken(extraClaims, user);
+        String jwtToken = jwtUtil.generateToken(extraClaims, user);
         return AuthResponse.builder().token(jwtToken).build();
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getCorreo(), request.getContrasena()));
-        var user = usuarioRepository.findByCorreo(request.getCorreo()).orElseThrow();
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getCorreo(), request.getContrasena())
+        );
+        
+        Usuario user = usuarioRepository.findByCorreo(request.getCorreo())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", user.getRol());
+        extraClaims.put("nombre", user.getNombreCompleto());
         
-        var jwtToken = jwtUtil.generateToken(extraClaims, user);
+        String jwtToken = jwtUtil.generateToken(extraClaims, user);
         return AuthResponse.builder().token(jwtToken).build();
     }
 }

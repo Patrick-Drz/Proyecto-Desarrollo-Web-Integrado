@@ -27,8 +27,12 @@ public class Oferta {
     private LocalDateTime fechaInicio;
     
     private LocalDateTime fechaFin;
-    
-    private boolean activa;
+      
+    @Column(nullable = false)
+    private Integer stock; 
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean activa = true;
 
     public enum TipoDescuento { PORCENTAJE, MONTO_FIJO }
 }

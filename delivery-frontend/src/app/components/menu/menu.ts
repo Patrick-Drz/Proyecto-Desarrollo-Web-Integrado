@@ -30,7 +30,7 @@ export class Menu implements OnInit {
   }
 
   cargarProductos(): void {
-    this.productService.obtenerProductos().subscribe({
+    this.productService.obtenerProductosActivos().subscribe({
       next: (data) => {
         this.productos = data;
         this.productos.forEach(p => this.cantidades[p.id] = 1);
@@ -40,8 +40,8 @@ export class Menu implements OnInit {
   }
 
   cargarOfertas(): void {
-    this.offerService.obtenerOfertas().subscribe({
-      next: (data) => this.ofertas = data.filter(o => o.activa),
+    this.offerService.obtenerOfertasActivas().subscribe({
+      next: (data) => this.ofertas = data,
       error: (err) => console.error(err)
     });
   }

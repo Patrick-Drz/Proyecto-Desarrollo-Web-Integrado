@@ -20,7 +20,8 @@ export class AdminProducts implements OnInit {
       precio: ['', [Validators.required, Validators.min(0)]],
       stock: ['', [Validators.required, Validators.min(0)]],
       descripcion: [''],
-      rutaImagen: ['']
+      rutaImagen: [''],
+      activo: [true]
     });
   }
 
@@ -43,10 +44,33 @@ export class AdminProducts implements OnInit {
       } else {
         this.productService.crearProducto(producto).subscribe(() => {
           this.cargarProductos();
-          this.productForm.reset();
+          this.productForm.reset({ activo: true });
         });
       }
     }
+  }
+
+  toggleEstado(producto: Producto) {
+    const estadoOriginal = producto.activo; 
+
+    this.productService.cambiarEstado(producto.id).subscribe({
+      next: (prodActualizado: any) => {
+        producto.activo = prodActualizado.activo;
+        console.log('Estado actualizado');
+      },
+      error: (err) => {
+        console.error(err);
+        
+        producto.activo = estadoOriginal; 
+
+        if (err.error && typeof err.error === 'string') {
+            alert(err.error); 
+        } else {
+            alert('Error al cambiar el estado del producto.');
+        }
+        this.cargarProductos(); 
+      }
+    });
   }
 
   cargarProducto(producto: Producto) {
@@ -67,6 +91,6 @@ export class AdminProducts implements OnInit {
   cancelEdit() {
     this.editMode = false;
     this.currentProductId = null;
-    this.productForm.reset();
+    this.productForm.reset({ activo: true });
   }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.*;
 import lombok.Data;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.ToString;
 import lombok.EqualsAndHashCode;
@@ -22,13 +22,15 @@ public class OrdenVenta {
     private LocalDateTime fechaOrden;
 
     private BigDecimal total;
+    private BigDecimal igv; 
     private String estado;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) 
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference
+
+    @JsonIgnoreProperties({"ordenesVenta", "password", "hibernateLazyInitializer", "handler"}) 
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)

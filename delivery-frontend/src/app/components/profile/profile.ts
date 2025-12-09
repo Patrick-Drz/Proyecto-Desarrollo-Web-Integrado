@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/services/auth';
 import { OrderService, Orden } from '../../core/services/order';
-import { LocationService, Direccion } from '../../core/services/location';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -11,63 +9,111 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class ProfileComponent implements OnInit {
-  usuario: any = {
-    nombre: 'Cargando...',
-    email: '...',
-    codigo: '---'
-  };
-  direcciones: Direccion[] = [];
-  ultimasOrdenes: Orden[] = [];
+  usuario: any = null;
+  
+  totalPedidos: number = 0;
+  totalProductosComprados: number = 0;
+  
+  puntosXP: number = 0;
+  nombreNivel: string = 'Cachimbo';
+  siguienteNivel: string = 'Regular';
+  xpParaSiguiente: number = 1000;
+  porcentajeProgreso: number = 0;
+  colorNivel: string = 'bg-secondary'; 
+
+  ultimosPedidos: Orden[] = [];
+  productoFavorito: any = null;
 
   constructor(
     private authService: AuthService,
-    private orderService: OrderService,
-    private locationService: LocationService,
-    private router: Router
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
-    this.cargarDatosUsuario();
-    this.cargarDirecciones();
-    this.cargarOrdenes();
-  }
-
-  cargarDatosUsuario() {
-    this.authService.getProfile().subscribe({
+    this.authService.getUserProfile().subscribe({
       next: (data) => {
-        this.usuario = {
-          nombre: data.nombreCompleto,
-          email: data.correo,
-          codigo: data.codigoEstudiante || 'Sin código'
-        };
-      },
-      error: (err) => {
-        console.error('Error perfil:', err);
-        this.usuario = {
-          nombre: 'Error al cargar',
-          email: 'Inicia sesión nuevamente',
-          codigo: '---'
-        };
+        this.usuario = data;
+      }
+    });
+
+    this.orderService.obtenerMisOrdenes().subscribe({
+      next: (ordenes) => {
+        this.procesarDatosGamificacion(ordenes);
       }
     });
   }
 
-  cargarDirecciones() {
-    this.locationService.obtenerDirecciones().subscribe({
-        next: (data) => this.direcciones = data,
-        error: () => this.direcciones = []
+  procesarDatosGamificacion(ordenes: Orden[]) {
+    this.totalPedidos = ordenes.length;
+    this.ultimosPedidos = ordenes.sort((a, b) => b.id - a.id).slice(0, 3);
+    
+    let totalItems = 0;
+    const contadorFavoritos: any = {};
+    let maxCantidad = 0;
+    let ganador: any = null;
+
+    ordenes.forEach(orden => {
+      orden.detalles.forEach(detalle => {
+        const cantidad = detalle.cantidad;
+        totalItems += cantidad;
+
+        const item: any = detalle;
+
+        const nombre = item.producto?.nombre || item.oferta?.nombreOferta;
+        const img = item.producto?.rutaImagen || 'assets/icons/offer-generic.png';
+        
+        const key = nombre || 'Item';
+
+        if (!contadorFavoritos[key]) {
+          contadorFavoritos[key] = { count: 0, nombre: nombre, img: img };
+        }
+        contadorFavoritos[key].count += cantidad;
+
+        if (contadorFavoritos[key].count > maxCantidad) {
+          maxCantidad = contadorFavoritos[key].count;
+          ganador = contadorFavoritos[key];
+        }
+      });
     });
+
+    this.totalProductosComprados = totalItems;
+    this.productoFavorito = ganador;
+
+    this.puntosXP = (this.totalPedidos * 100) + (totalItems * 10);
+    this.calcularRango(this.puntosXP);
   }
 
-  cargarOrdenes() {
-    this.orderService.obtenerMisOrdenes().subscribe({
-        next: (data) => this.ultimasOrdenes = data.reverse().slice(0, 5),
-        error: () => this.ultimasOrdenes = []
-    });
+  calcularRango(xp: number) {
+    if (xp < 500) {
+      this.nombreNivel = 'Cachimbo'; 
+      this.colorNivel = 'bg-secondary';
+      this.siguienteNivel = 'Estudiante Regular';
+      this.xpParaSiguiente = 500;
+    } else if (xp < 1500) {
+      this.nombreNivel = 'Estudiante Regular'; 
+      this.colorNivel = 'bg-info';
+      this.siguienteNivel = 'Delegado';
+      this.xpParaSiguiente = 1500;
+    } else if (xp < 3000) {
+      this.nombreNivel = 'Delegado'; 
+      this.colorNivel = 'bg-primary';
+      this.siguienteNivel = 'Catedrático';
+      this.xpParaSiguiente = 3000;
+    } else {
+      this.nombreNivel = 'Catedrático'; 
+      this.colorNivel = 'bg-warning text-dark';
+      this.siguienteNivel = 'Leyenda (Max)';
+      this.xpParaSiguiente = 10000;
+    }
+
+    if (this.xpParaSiguiente > xp) {
+      this.porcentajeProgreso = (xp / this.xpParaSiguiente) * 100;
+    } else {
+      this.porcentajeProgreso = 100;
+    }
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 }

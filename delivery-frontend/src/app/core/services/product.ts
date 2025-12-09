@@ -10,6 +10,7 @@ export interface Producto {
   precio: number;
   stock: number;
   rutaImagen: string;
+  activo: boolean; 
   componentesCombo?: {
     cantidad: number;
     productoHijo: {
@@ -30,6 +31,10 @@ export class ProductService {
     return this.http.get<Producto[]>(this.apiUrl);
   }
 
+  obtenerProductosActivos(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}/activos`);
+  }
+
   obtenerProductoPorId(id: number): Observable<Producto> {
     return this.http.get<Producto>(`${this.apiUrl}/${id}`);
   }
@@ -40,6 +45,11 @@ export class ProductService {
 
   actualizarProducto(id: number, producto: Producto): Observable<Producto> {
     return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
+  }
+
+  // NUEVO: Cambiar estado
+  cambiarEstado(id: number): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}/estado`, {});
   }
 
   eliminarProducto(id: number): Observable<void> {
