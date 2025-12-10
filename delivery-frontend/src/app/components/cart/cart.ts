@@ -78,8 +78,9 @@ export class CartComponent implements OnInit {
           this.cartService.recargarCarrito(); 
           this.router.navigate(['/orders']);
         },
-        error: () => {
-          alert('Ocurrió un error al procesar el pedido.');
+        error: (err) => {
+          const mensaje = err.error?.message || 'Ocurrió un error al procesar el pedido.';
+          alert(mensaje);
         }
       });
     }
@@ -104,8 +105,10 @@ export class CartComponent implements OnInit {
     this.loading = true;
     this.cartService.agregarItem(idProd, cantidad, idOfer).subscribe({
         next: () => this.loading = false,
-        error: () => {
-            alert('Error al actualizar'); 
+        error: (err) => {
+            console.error(err);
+            const mensaje = err.error?.message || 'Error al actualizar cantidad.';
+            alert(mensaje); 
             this.loading = false;
         }
     });
@@ -117,8 +120,9 @@ export class CartComponent implements OnInit {
     this.loading = true;
     this.cartService.eliminarItem(item.id).subscribe({
         next: () => this.loading = false,
-        error: () => {
-            alert('Error al eliminar');
+        error: (err) => {
+            const mensaje = err.error?.message || 'Error al eliminar ítem.';
+            alert(mensaje);
             this.loading = false;
         }
     });

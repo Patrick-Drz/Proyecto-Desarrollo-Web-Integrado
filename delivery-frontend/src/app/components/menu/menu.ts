@@ -66,7 +66,11 @@ export class Menu implements OnInit {
     
     this.cartService.agregarItem(producto.id, cantidad, null).subscribe({
       next: () => alert(`¡${producto.nombre} añadido al carrito!`),
-      error: () => alert('Error al añadir producto.')
+      error: (err) => {
+        console.error(err);
+        const mensaje = err.error?.message || 'Error al añadir producto.';
+        alert(mensaje);
+      }
     });
   }
 
@@ -82,7 +86,8 @@ export class Menu implements OnInit {
         next: () => alert(`¡Oferta "${oferta.nombreOferta}" añadida al carrito!`),
         error: (err) => {
           console.error(err);
-          alert('Error al añadir la oferta.');
+          const mensaje = err.error?.message || 'Error al añadir la oferta.';
+          alert(mensaje);
         }
       });
     }

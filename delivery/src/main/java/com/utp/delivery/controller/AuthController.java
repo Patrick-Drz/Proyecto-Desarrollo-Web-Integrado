@@ -7,6 +7,7 @@ import com.utp.delivery.dto.UserProfileResponse;
 import com.utp.delivery.model.Usuario;
 import com.utp.delivery.repository.UsuarioRepository; 
 import com.utp.delivery.service.AuthService;
+import jakarta.validation.Valid; 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,12 +28,12 @@ public class AuthController {
     private final UsuarioRepository usuarioRepository; 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) { 
         return ResponseEntity.ok(authService.register(request));
     }
     
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) { 
         return ResponseEntity.ok(authService.login(request));
     }
 
@@ -59,7 +60,7 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> request) {
-        String correo = request.get("correo").trim(); // Limpiamos espacios
+        String correo = request.get("correo").trim();
         String token = authService.generarTokenRecuperacion(correo);
         
         String link = "http://localhost:4200/auth/reset-password?token=" + token;

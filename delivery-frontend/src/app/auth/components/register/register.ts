@@ -16,7 +16,7 @@ export class RegisterComponent {
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       nombreCompleto: ['', Validators.required],
-      codigoEstudiante: ['', Validators.required],
+      codigoEstudiante: ['', [Validators.required, Validators.pattern(/^[uU]\d{8}$/)]], 
       correo: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(6)]]
     });
@@ -24,12 +24,27 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      
+      const codigo = this.registerForm.get('codigoEstudiante')?.value.toString().trim().toLowerCase();
+      const correo = this.registerForm.get('correo')?.value.toString().trim().toLowerCase();
+
+      if (!correo.endsWith('@utp.edu.pe')) {
+        this.errorMessage = 'Debes usar tu correo institucional (@utp.edu.pe).';
+        return;
+      }
+
+      const usuarioCorreo = correo.split('@')[0];
+      if (usuarioCorreo !== codigo) {
+        this.errorMessage = `El correo (${usuarioCorreo}) no coincide con el código (${codigo}).`;
+        return;
+      }
+
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
           this.router.navigate(['/']); 
         },
         error: (err) => {
-          this.errorMessage = 'Error al registrar. Verifica los datos.';
+          this.errorMessage = err.error?.message || 'Error al registrar. Verifica los datos.';
         }
       });
     } else {

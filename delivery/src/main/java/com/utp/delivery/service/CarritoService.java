@@ -34,6 +34,14 @@ public class CarritoService {
                     .filter(item -> item.getProducto() != null && item.getProducto().getId().equals(producto.getId()))
                     .findFirst();
 
+            int cantidadActualEnCarrito = itemExistente.map(ItemCarrito::getCantidad).orElse(0);
+            int cantidadTotalSolicitada = cantidadActualEnCarrito + itemRequest.getCantidad();
+
+            if (producto.getStock() < cantidadTotalSolicitada) {
+                throw new IllegalStateException("Stock insuficiente. Disponible: " + producto.getStock() + 
+                                               ", ya tienes en carrito: " + cantidadActualEnCarrito);
+            }
+
             if (itemExistente.isPresent()) {
                 ItemCarrito item = itemExistente.get();
                 item.setCantidad(item.getCantidad() + itemRequest.getCantidad());
@@ -53,6 +61,13 @@ public class CarritoService {
             Optional<ItemCarrito> itemExistente = carrito.getItems().stream()
                     .filter(item -> item.getOferta() != null && item.getOferta().getId().equals(oferta.getId()))
                     .findFirst();
+
+            int cantidadActualEnCarrito = itemExistente.map(ItemCarrito::getCantidad).orElse(0);
+            int cantidadTotalSolicitada = cantidadActualEnCarrito + itemRequest.getCantidad();
+
+            if (oferta.getStock() < cantidadTotalSolicitada) {
+                throw new IllegalStateException("Stock insuficiente para la oferta. Disponible: " + oferta.getStock());
+            }
 
             if (itemExistente.isPresent()) {
                 ItemCarrito item = itemExistente.get();

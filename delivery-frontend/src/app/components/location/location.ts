@@ -44,8 +44,8 @@ export class LocationComponent {
           this.mensajeExito = '¡Ubicación guardada correctamente!';
           setTimeout(() => this.router.navigate(['/cart']), 1500);
         },
-        error: () => {
-          this.mensajeError = 'Error al guardar la ubicación. Intenta nuevamente.';
+        error: (err) => {
+          this.mensajeError = err.error?.message || 'Error al guardar la ubicación. Intenta nuevamente.';
         }
       });
     } else {

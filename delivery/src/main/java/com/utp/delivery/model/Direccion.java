@@ -1,6 +1,10 @@
 package com.utp.delivery.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -12,13 +16,16 @@ public class Direccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING) 
-    private Torre torre;
+    @NotNull(message = "La torre es obligatoria")
+    @Pattern(regexp = "[ABCD]", message = "La torre debe ser A, B, C o D")
+    private String torre;
 
+    @NotNull(message = "El piso es obligatorio")
+    @Min(value = 1, message = "El piso mínimo es 1")
+    @Max(value = 15, message = "El piso máximo es 15")
     private int piso;
-    private int aula;
 
-    public enum Torre {
-        A, B, C, D
-    }
+    @NotNull(message = "El número de aula es obligatorio")
+    @Min(value = 1, message = "El aula debe ser un número positivo")
+    private int aula;
 }

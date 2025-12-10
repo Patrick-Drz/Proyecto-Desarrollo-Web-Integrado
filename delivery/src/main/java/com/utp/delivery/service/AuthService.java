@@ -26,6 +26,18 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
+        String codigo = request.getCodigoEstudiante().trim().toLowerCase();
+        String correo = request.getCorreo().trim().toLowerCase();
+
+        if (!correo.endsWith("@utp.edu.pe")) {
+            throw new IllegalArgumentException("Debes usar tu correo institucional (@utp.edu.pe)");
+        }
+
+        String prefix = correo.substring(0, correo.indexOf("@"));
+        if (!prefix.equals(codigo)) {
+            throw new IllegalArgumentException("El correo debe coincidir con el código (Ej: " + codigo + "@utp.edu.pe)");
+        }
+
         Usuario user = new Usuario();
         user.setNombreCompleto(request.getNombreCompleto());
         user.setCorreo(request.getCorreo().trim());
