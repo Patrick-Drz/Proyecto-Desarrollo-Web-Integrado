@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 export interface UserProfile {
   id: number;
@@ -13,16 +14,16 @@ export interface UserProfile {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth'; 
+  private apiUrl = `${environment.apiUrl}/auth` || 'http://localhost:8080/api/auth';
   private tokenKey = 'auth_token';
-  
+
   private userRoleSubject = new BehaviorSubject<string | null>(this.getRoleFromToken());
   public userRole$ = this.userRoleSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
   register(datosUsuario: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, datosUsuario).pipe(
@@ -76,7 +77,7 @@ export class AuthService {
     if (!token) return null;
     try {
       const decoded: any = jwtDecode(token);
-      return decoded.role || decoded.roles || decoded.sub || null; 
+      return decoded.role || decoded.roles || decoded.sub || null;
     } catch (error) {
       return null;
     }

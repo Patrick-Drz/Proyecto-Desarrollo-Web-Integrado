@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Usuario {
   id?: number;
@@ -14,12 +15,13 @@ export interface Usuario {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminUserService {
-  private apiUrl = 'http://localhost:8080/api/admin/usuarios';
+  private apiUrl =
+    `${environment.apiUrl}/admin/usuarios` || 'http://localhost:8080/api/admin/usuarios';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   listar(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.apiUrl);

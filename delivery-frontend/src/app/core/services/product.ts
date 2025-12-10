@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 export interface Producto {
   id: number;
   codigoProducto: string;
@@ -9,21 +10,21 @@ export interface Producto {
   precio: number;
   stock: number;
   rutaImagen: string;
-  activo: boolean; 
+  activo: boolean;
   componentesCombo?: {
     cantidad: number;
     productoHijo: {
       nombre: string;
-    }
+    };
   }[];
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/api/productos';
+  private apiUrl = `${environment.apiUrl}/productos` || 'http://localhost:8080/api/productos';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   obtenerProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiUrl);

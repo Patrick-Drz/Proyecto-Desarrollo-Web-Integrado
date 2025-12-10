@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: delivery-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./deliveryutpbd.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./delivery
+    container_name: delivery-backend
+    ports:
+      - "${SERVER_PORT}:8080"
+    depends_on:
+      - db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 3306
+
+  # --- Frontend (Angular) ---
+  frontend:
+    build:
+      context: ./delivery-frontend
+      args:
+        API_URL: ${API_URL}
+    container_name: delivery-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

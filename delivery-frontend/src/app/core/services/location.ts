@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Direccion {
   id?: number;
@@ -10,12 +11,12 @@ export interface Direccion {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LocationService {
-  private apiUrl = 'http://localhost:8080/api/direcciones';
+  private apiUrl = `${environment.apiUrl}/direcciones` || 'http://localhost:8080/api/direcciones';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   guardarDireccion(direccion: Direccion): Observable<Direccion> {
     return this.http.post<Direccion>(this.apiUrl, direccion);

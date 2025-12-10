@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface DetalleOrden {
   id?: number;
@@ -22,10 +23,10 @@ export interface Orden {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8080/api/ordenes';
+  private apiUrl = `${environment.apiUrl}/ordenes` || 'http://localhost:8080/api/ordenes';
 
   constructor(private http: HttpClient) {}
 

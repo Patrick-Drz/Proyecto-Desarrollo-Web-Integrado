@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Oferta {
   id?: number;
@@ -12,16 +13,16 @@ export interface Oferta {
   fechaInicio: string;
   fechaFin: string;
   activa: boolean;
-  stock: number; 
+  stock: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OfferService {
-  private apiUrl = 'http://localhost:8080/api/ofertas';
+  private apiUrl = `${environment.apiUrl}/ofertas` || 'http://localhost:8080/api/ofertas';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   obtenerOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(this.apiUrl);
