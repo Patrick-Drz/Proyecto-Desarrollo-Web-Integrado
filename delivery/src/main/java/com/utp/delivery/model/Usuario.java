@@ -1,5 +1,6 @@
 package com.utp.delivery.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class Usuario implements UserDetails {
     
     @Column(unique = true)
     private String correo;
-    
-    @JsonIgnore
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String contrasena;
     
     private String rol;
