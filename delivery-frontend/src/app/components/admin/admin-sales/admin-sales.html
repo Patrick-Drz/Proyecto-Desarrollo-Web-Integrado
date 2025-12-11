@@ -10,6 +10,7 @@
                             <th>ID</th>
                             <th>Fecha</th>
                             <th>Usuario</th>
+                            <th>Ubicación</th> 
                             <th>Total</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -34,6 +35,18 @@
                                         </small>
                                     </div>
                                 </div>
+                            </td>
+
+                            <td>
+                                <div *ngIf="orden.direccionEntrega" class="d-flex flex-column">
+                                    <span class="badge bg-info text-dark mb-1" style="width: fit-content;">
+                                        <i class="fa-solid fa-building"></i> Torre {{ orden.direccionEntrega.torre }}
+                                    </span>
+                                    <small class="text-muted fw-bold">Aula {{ orden.direccionEntrega.aula }} - Piso {{ orden.direccionEntrega.piso }}</small>
+                                </div>
+                                <span *ngIf="!orden.direccionEntrega" class="text-muted small fst-italic">
+                                    (Sin dirección)
+                                </span>
                             </td>
 
                             <td class="fw-bold text-success">S/ {{ orden.total | number:'1.2-2' }}</td>
@@ -76,12 +89,27 @@
             <div class="modal-body p-4">
                 
                 <div class="row mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h6 class="text-muted text-uppercase small fw-bold">Cliente</h6>
                         <p class="mb-1 fw-bold">{{ ordenSeleccionada.usuario?.nombreCompleto }}</p>
                         <p class="mb-0 small text-muted">{{ ordenSeleccionada.usuario?.correo }}</p>
                     </div>
-                    <div class="col-md-6 text-end">
+
+                    <div class="col-md-4 border-start border-end">
+                        <h6 class="text-muted text-uppercase small fw-bold">Punto de Entrega</h6>
+                        <div *ngIf="ordenSeleccionada.direccionEntrega">
+                            <p class="mb-1 fw-bold text-primary">
+                                <i class="fa-solid fa-location-dot me-1"></i>
+                                Torre {{ ordenSeleccionada.direccionEntrega.torre }} - Aula {{ ordenSeleccionada.direccionEntrega.aula }}
+                            </p>
+                            <p class="mb-0 small text-muted">Piso {{ ordenSeleccionada.direccionEntrega.piso }}</p>
+                        </div>
+                        <div *ngIf="!ordenSeleccionada.direccionEntrega" class="text-muted small">
+                            No se registró ubicación.
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 text-end">
                         <h6 class="text-muted text-uppercase small fw-bold">Estado</h6>
                         <span class="badge rounded-pill fs-6" [ngClass]="{
                             'bg-warning text-dark': ordenSeleccionada.estado === 'PENDIENTE',
